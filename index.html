@@ -1,0 +1,2086 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@600;800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Matrix Consult: رواد التقنية القانونية في المملكة. نستثمر في الذكاء الاصطناعي والأتمتة لإحداث ثورة في الخدمات القانونية. اكتشف فرص الاستثمار معنا.">
+    <title>Matrix Consult | الاستثمار في مستقبل التقنية القانونية</title>
+    <style>
+        :root {
+            --bg-dark: #111827;      /* Dark Slate Blue */
+            --bg-card: #1F2937;      /* Lighter Slate Blue */
+            --text-primary: #F9FAFB;   /* Off-white */
+            --text-secondary: #9CA3AF; /* Medium Gray */
+            --accent: #0077FF;      /* Electric Blue */
+            --border-color: #374151; /* Darker Gray Border */
+            --success-color: #22c55e;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        #hero-canvas-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            cursor: grab;
+        }
+        
+        h1, h2, h3, h4, .logo-text {
+            font-family: 'Noto Kufi Arabic', sans-serif;
+            font-weight: 800;
+        }
+        
+        .container {
+            max-width: 85rem; margin: auto; padding: 0 1.5rem;
+            position: relative; z-index: 2;
+        }
+
+        #navbar {
+            transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
+        }
+        #navbar.scrolled {
+            background-color: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        #main-nav a {
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        #main-nav a:hover { color: var(--text-primary); }
+        
+        .cta-btn {
+            background-color: var(--accent);
+            color: #FFFFFF; /* White text for better contrast */
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            font-weight: 600;
+            border-radius: 9999px; /* pill shape */
+            padding: 0.8rem 2rem;
+        }
+        .cta-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 119, 255, 0.4);
+            background-color: #0088ff;
+        }
+        .cta-btn-secondary {
+             background-color: var(--bg-card);
+             color: var(--text-primary);
+             border: 1px solid var(--border-color);
+        }
+        .cta-btn-secondary:hover {
+             background-color: var(--accent);
+             border-color: var(--accent);
+             box-shadow: 0 0 30px rgba(0, 119, 255, 0.4);
+        }
+
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transition-delay: var(--delay, 0s);
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1; transform: translateY(0);
+        }
+        
+        .section-title span { color: var(--accent); }
+        
+        /* --- New Services Section Styles --- */
+        .service-card-main {
+            background: linear-gradient(145deg, var(--bg-card), #2a3649);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .service-card-main:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 30px rgba(0, 119, 255, 0.15);
+        }
+        .service-card-small {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .service-card-small:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        .service-card-small .icon-wrapper-small {
+            background-color: rgba(0, 119, 255, 0.1);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .service-card-small:hover .icon-wrapper-small {
+            background-color: var(--accent);
+            transform: rotate(-10deg) scale(1.1);
+        }
+        .service-card-small .icon-wrapper-small svg {
+            color: var(--accent);
+            transition: color 0.3s ease;
+        }
+        .service-card-small:hover .icon-wrapper-small svg {
+            color: white;
+        }
+
+        .resource-card {
+             background-color: var(--bg-card);
+             border: 1px solid var(--border-color);
+             border-radius: 1.5rem;
+             padding: 2rem;
+             display: flex; flex-direction: column;
+        }
+        .resource-card .card-content { display: flex; flex-direction: column; flex-grow: 1;}
+        .resource-card .card-category { background-color: var(--accent); color: white; font-size: 0.75rem; font-weight: bold; padding: 0.25rem 0.75rem; border-radius: 999px; display: inline-block; margin-bottom: 0.75rem; align-self: flex-start;}
+        .resource-card .card-title { font-size: 1.25rem; font-weight: bold; color: var(--text-primary); margin-bottom: 0.5rem; }
+        .resource-card .card-excerpt { color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.9rem; flex-grow: 1;}
+        .resource-card .read-more { color: var(--accent); font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; gap: 0.25rem; transition: gap 0.2s ease; margin-top: auto; }
+        .resource-card .read-more:hover { gap: 0.5rem; }
+
+        .stat-number { font-size: 3rem; font-weight: 800; color: var(--accent); }
+        
+        .methodology-step { position: relative; padding-right: 3rem; }
+        .methodology-step::before {
+            content: attr(data-step); position: absolute; right: 0; top: -5px; font-size: 1rem; font-weight: 700; color: var(--accent);
+            background-color: rgba(0, 119, 255, 0.1); border: 1px solid rgba(0, 119, 255, 0.3); width: 2rem; height: 2rem;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        }
+        .methodology-step:not(:last-child)::after {
+            content: ''; position: absolute; right: 1rem; top: 2.5rem; bottom: -1.5rem; width: 1px; background-color: var(--border-color);
+        }
+
+        input, textarea, select {
+            background-color: #374151; border: 1px solid #4b5563; border-radius: 0.75rem; color: var(--text-primary);
+            transition: border-color 0.3s, box-shadow 0.3s; padding: 1rem;
+        }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0, 119, 255, 0.2); }
+        
+        #ai-chat-messages { scrollbar-width: thin; scrollbar-color: var(--accent) var(--bg-dark); }
+        #ai-chat-messages::-webkit-scrollbar { width: 6px; }
+        #ai-chat-messages::-webkit-scrollbar-track { background: var(--bg-dark); }
+        #ai-chat-messages::-webkit-scrollbar-thumb { background-color: var(--accent); border-radius: 6px; }
+        .ai-typing-indicator span { animation: blink 1.4s infinite both; }
+        .ai-typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .ai-typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes blink { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+        #ai-feature-bar {
+            display: flex;
+            gap: 0.75rem;
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-dark);
+            overflow-x: auto;
+            flex-shrink: 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent) var(--bg-dark);
+        }
+        #ai-feature-bar::-webkit-scrollbar { height: 6px; }
+        #ai-feature-bar::-webkit-scrollbar-track { background: var(--bg-dark); }
+        #ai-feature-bar::-webkit-scrollbar-thumb { background-color: var(--accent); border-radius: 6px; }
+        .ai-feature-btn {
+            padding: 0.75rem 0.5rem; font-size: 0.8rem; border-radius: 0.5rem; background-color: var(--bg-card); color: var(--text-secondary);
+            border: 1px solid var(--border-color); cursor: pointer; transition: all 0.2s ease; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 0.3rem; font-weight: 600;
+            flex-shrink: 0;
+            min-width: 110px;
+        }
+        .ai-feature-btn:hover { background-color: var(--accent); color: white; border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .ai-response-block {
+            background: var(--bg-dark); border: 1px solid var(--border-color); border-left-width: 4px;
+            border-left-color: var(--accent); border-radius: 0.75rem; padding: 1rem 1.25rem; margin-top: 0.5rem;
+        }
+        .ai-response-block h4 { font-weight: bold; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+        .policy-draft-content {
+            white-space: pre-wrap; font-family: 'Inter', monospace; font-size: 0.8rem; line-height: 1.6; background-color: #0d121c;
+            padding: 0.75rem; border-radius: 0.25rem; border: 1px solid var(--border-color); max-height: 250px; overflow-y: auto;
+            text-align: right; direction: rtl; color: var(--text-primary);
+        }
+        .ai-response-block .copy-btn {
+            background-color: #374151; color: #9ca3af; border: none; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;
+            cursor: pointer; transition: background-color 0.2s; float: left; margin-top: -0.5rem;
+        }
+        .ai-response-block .copy-btn:hover { background-color: #4b5563; }
+        .ai-form-container { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 1.5rem; margin-top: 0.5rem; }
+        .ai-form-container h4 { font-weight: bold; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; font-size: 1.1rem; }
+        .ai-form-group { margin-bottom: 1rem; }
+        .ai-form-group label { display: block; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; font-size: 0.875rem; }
+        .ai-form-input {
+            width: 100%; padding: 0.75rem; border-radius: 0.375rem; border: 1px solid var(--border-color); background-color: var(--bg-dark);
+            color: var(--text-primary); transition: all 0.2s ease; font-size: 0.875rem;
+        }
+        .ai-form-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0, 119, 255, 0.2); }
+        
+        .faq-item { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 1rem; }
+        .faq-item .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out, padding 0.5s ease-out; padding-top: 0; padding-bottom: 0; }
+        .faq-item.open .faq-answer { max-height: 200px; padding-top: 0; padding-bottom: 1.5rem; }
+        .faq-item .faq-toggle-icon { transition: transform 0.3s ease-in-out; }
+        .faq-item.open .faq-toggle-icon { transform: rotate(45deg); }
+
+        .modal-overlay { transition: opacity 0.3s ease; backdrop-filter: blur(8px); }
+        .modal-content {
+            background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); transform: scale(0.95) translateY(20px); transition: transform 0.3s ease-out;
+        }
+        .modal-overlay:not(.hidden) .modal-content { transform: scale(1) translateY(0); }
+        .service-modal-content ul li { padding-right: 2rem; position: relative; margin-bottom: 0.75rem; }
+        .service-modal-content ul li::before { content: '✓'; color: var(--success-color); position: absolute; right: 0; font-weight: bold; font-size: 1.25rem; }
+        .case-study-snapshot { margin-top: 2rem; padding: 1.5rem; background-color: var(--bg-dark); border-right: 4px solid var(--accent); border-radius: 0.5rem; }
+        .case-study-snapshot h4 { font-weight: bold; color: var(--text-primary); margin-bottom: 0.5rem; }
+
+        .portal {
+            position: fixed; inset: 0; z-index: 200; opacity: 0; visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+            background-color: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(12px);
+        }
+        .portal.active { opacity: 1; visibility: visible; }
+        .portal .portal-content {
+             transition: transform 0.5s ease-in-out;
+             transform: scale(0.95);
+        }
+        .portal.active .portal-content {
+            transform: scale(1);
+        }
+
+        #dashboard-portal {
+            background-color: #111827; /* Solid dark background */
+            overflow-y: auto; /* السماح بالتمرير العمودي داخل اللوحة */
+            overscroll-behavior: contain; /* منع تمرير اللوحة من التأثير على الصفحة الرئيسية */
+        }
+        #loading-screen {
+            position: absolute; inset: 0; background-color: var(--bg-dark); display: flex; flex-direction: column;
+            align-items: center; justify-content: center; z-index: 10; transition: opacity 0.5s ease-in-out 0.5s;
+        }
+        #loading-screen.hidden { opacity: 0; pointer-events: none; }
+        .spinner {
+            width: 60px; height: 60px; border: 4px solid var(--border-color); border-top-color: var(--accent);
+            border-radius: 50%; animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        #dashboard-content { opacity: 0; transition: opacity 0.5s ease-in-out 1s; }
+        #dashboard-portal.loaded #dashboard-content { opacity: 1; }
+        .widget {
+            background: var(--bg-card); /* More solid background */
+            border: 1px solid var(--border-color);
+            border-radius: 1.5rem; /* More rounded */
+            padding: 1.5rem 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        .widget:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0, 119, 255, 0.15); }
+        .widget-title { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; font-weight: bold; margin-bottom: 1rem; color: var(--text-secondary); font-size: 1rem;}
+        .widget-icon {
+            background-color: var(--accent); color: white;
+            border-radius: 0.75rem; padding: 0.5rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .kpi-main { display: flex; align-items: flex-end; gap: 0.75rem; margin-top: auto; }
+        .kpi-value { font-size: 2.75rem; line-height: 1; font-weight: 800; color: var(--text-primary); }
+        .kpi-trend { display: flex; align-items: center; gap: 0.25rem; font-weight: bold; padding-bottom: 0.25rem; }
+        .trend-up { color: var(--success-color); }
+        .trend-down { color: var(--danger-color); }
+        .kpi-value.flash-update { animation: flash-green 0.8s ease-out; }
+        @keyframes flash-green { 50% { color: var(--success-color); text-shadow: 0 0 10px var(--success-color); } }
+        .kpi-value.flash-update-red { animation: flash-red 0.8s ease-out; }
+        @keyframes flash-red { 50% { color: var(--danger-color); text-shadow: 0 0 10px var(--danger-color); } }
+        
+        .alert-item {
+            display: flex; align-items: center; gap: 1rem; padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .alert-item:last-child { border-bottom: none; }
+        .alert-icon-wrapper {
+            width: 2.5rem; height: 2.5rem; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .alert-item.priority-high .alert-icon-wrapper { background-color: rgba(239, 68, 68, 0.1); color: var(--danger-color); }
+        .alert-item.priority-medium .alert-icon-wrapper { background-color: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .alert-item.priority-low .alert-icon-wrapper { background-color: rgba(34, 197, 94, 0.1); color: var(--success-color); }
+        .alert-time { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem; }
+        
+        .risk-matrix-container { display: flex; flex-direction: column; flex-grow: 1; }
+        .risk-matrix-wrapper { position: relative; flex-grow: 1; }
+        .risk-matrix { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr); gap: 0.5rem; height: 100%; aspect-ratio: 1; margin: auto; }
+        .risk-cell { border-radius: 0.25rem; }
+        .risk-dot { position: absolute; width: 14px; height: 14px; background-color: white; border-radius: 50%; border: 2px solid rgba(0,0,0,0.5); box-shadow: 0 1px 3px rgba(0,0,0,0.3); transition: transform 0.2s; cursor: pointer; }
+        .risk-dot:hover { transform: scale(1.5); }
+        .risk-axes { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-secondary); padding: 0 0.5rem; }
+        .risk-axis-label { writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg); text-align: center; color: var(--text-secondary); font-size: 0.75rem;}
+        
+        .risk-tooltip {
+            position: absolute; background-color: var(--bg-dark); color: var(--text-primary); border: 1px solid var(--border-color);
+            padding: 0.75rem 1rem; border-radius: 0.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10;
+            opacity: 0; visibility: hidden; transition: opacity 0.2s, transform 0.2s; transform: translateY(10px);
+            pointer-events: none; max-width: 200px;
+        }
+        .risk-tooltip.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        
+        #back-to-top {
+            position: fixed; bottom: 2rem; left: 2rem; background-color: var(--accent); color: white; width: 3rem; height: 3rem;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s, transform 0.3s; transform: translateY(10px); z-index: 100;
+        }
+        #back-to-top.show { opacity: 1; visibility: visible; transform: translateY(0); }
+
+        .partner-logos { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4rem; }
+        .partner-logo { max-height: 50px; width: auto; filter: grayscale(100%) opacity(0.6); transition: all 0.3s ease; }
+        .partner-logo:hover { filter: grayscale(0%) opacity(1); transform: scale(1.1); }
+
+        .pulse-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-right: 4px solid var(--accent);
+            border-radius: 1rem;
+            padding: 1.5rem 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .pulse-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 119, 255, 0.1);
+        }
+        .pulse-badge {
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            color: white;
+        }
+        .pulse-badge-new { background-color: var(--success-color); }
+        .pulse-badge-updated { background-color: #f59e0b; } /* Amber-500 */
+        .pulse-badge-draft { background-color: var(--text-secondary); }
+
+        .pulse-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+        .pulse-meta a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .pulse-meta a:hover {
+            text-decoration: underline;
+        }
+
+        .draggable-carousel {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .draggable-carousel::-webkit-scrollbar {
+            display: none;
+        }
+        .draggable-carousel.grabbing { cursor: grabbing; }
+
+        /* --- New Founder Card Styles --- */
+        .founder-card-wrapper {
+            max-width: 550px;
+            position: relative;
+        }
+        .founder-card {
+            background: linear-gradient(145deg, var(--bg-card), #2a3649);
+            border: 1px solid var(--border-color);
+            border-radius: 1.5rem;
+            padding: 3rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1; /* Keep card above pseudo-element */
+            overflow: hidden; /* Clip pseudo-elements if needed */
+        }
+        .founder-card-wrapper::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            border-radius: 1.7rem; /* slightly larger than card */
+            background: conic-gradient(from var(--angle), var(--accent), #60A5FA, transparent, transparent, var(--accent));
+            animation: spin 6s linear infinite;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+        }
+        .founder-card-wrapper:hover::before {
+            opacity: 1;
+        }
+        @property --angle {
+          syntax: '<angle>';
+          initial-value: 0deg;
+          inherits: false;
+        }
+        @keyframes spin { to { --angle: 360deg; } }
+
+        .founder-header { margin-bottom: 2rem; }
+        .founder-image-wrapper {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 1.5rem;
+        }
+        .founder-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 6px solid var(--bg-dark);
+        }
+        .founder-image-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            animation: pulse 2.5s infinite;
+            opacity: 0;
+        }
+        @keyframes pulse {
+          0% { transform: scale(0.95); opacity: 0.7; }
+          70% { transform: scale(1.15); opacity: 0; }
+          100% { transform: scale(0.95); opacity: 0; }
+        }
+        .founder-name { font-size: 2.25rem; font-weight: 900; color: var(--text-primary); }
+        .founder-title { font-size: 1.25rem; color: var(--accent); font-weight: bold; }
+        .founder-body {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+        }
+        .founder-detail .detail-title {
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+        }
+        .founder-detail .detail-content {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            padding-right: 2.5rem; /* Indent content under title */
+        }
+        .founder-detail .detail-content a {
+            color: var(--text-primary);
+            text-decoration: none;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 2px;
+            transition: all 0.3s ease;
+        }
+        .founder-detail .detail-content a:hover {
+            background-color: var(--accent);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        /* --- Interactive Founder Tabs --- */
+        .founder-tabs {
+            gap: 1rem;
+        }
+        .founder-tab-btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border: none;
+            background: transparent;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: -2px; /* To align with the border-b of the container */
+        }
+        .founder-tab-btn:hover {
+            color: var(--text-primary);
+        }
+        .founder-tab-btn.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .founder-content-wrapper {
+            position: relative;
+            min-height: 220px; /* Adjust to prevent layout shifts with logos */
+            padding: 1.5rem 0;
+        }
+        .founder-tab-content {
+            text-align: center;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+        }
+        .founder-tab-content.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .founder-tab-content p strong {
+            color: var(--text-primary);
+        }
+        .founder-tab-content ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            text-align: right;
+        }
+        .founder-tab-content ul li::before {
+            content: '•';
+            color: var(--accent);
+            font-weight: bold;
+            display: inline-block; 
+            width: 1em;
+            margin-left: 0.5em;
+        }
+        .founder-tab-content ul li strong {
+            color: var(--text-primary);
+        }
+        .founder-tab-content .contact-details {
+            padding-right: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.25rem;
+        }
+        .experience-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2.5rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+        .experience-logo {
+            height: 40px;
+            width: auto;
+            color: var(--text-secondary);
+            filter: grayscale(100%) brightness(1.5) opacity(0.6);
+            transition: all 0.3s ease;
+        }
+        .experience-logo:hover {
+            color: var(--text-primary);
+            filter: none;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="bg-bg-dark text-text-primary">
+
+<div id="main-content">
+    <header id="navbar" class="fixed top-0 z-50 w-full py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#home" class="flex items-center gap-3">
+                <svg class="h-8 w-8 text-text-primary" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 6L42 16.5V37.5L24 44L6 37.5V16.5L24 6Z" stroke="currentColor" stroke-width="3"/>
+                    <path d="M15 22L24 27.5L33 22" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M24 44V27.5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="logo-text text-2xl font-black">Matrix Consult</span>
+            </a>
+            <button id="mobile-menu-btn" class="md:hidden text-text-primary focus:outline-none p-2">
+                <svg id="hamburger-icon" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                <svg id="close-icon" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <nav id="main-nav" class="hidden md:flex items-center gap-10 text-base">
+                <a href="#home">الرئيسية</a>
+                <a href="#about">من نحن</a>
+                <a href="#services">خدماتنا</a>
+                <a href="#our-team">فريقنا</a>
+                <a href="#resources">المصادر</a>
+                <a href="#legislative-pulse">النبض التشريعي</a>
+                <a href="#interactive-tools">أدواتنا</a>
+                <a href="#faq">الأسئلة الشائعة</a>
+                <a href="#contact">التواصل</a>
+            </nav>
+        </div>
+        <nav id="mobile-menu" class="hidden md:hidden bg-bg-card border-t border-border-color py-4">
+            <ul class="flex flex-col items-center gap-6 text-lg">
+                 <li><a href="#home">الرئيسية</a></li>
+                 <li><a href="#about">من نحن</a></li>
+                 <li><a href="#services">خدماتنا</a></li>
+                 <li><a href="#our-team">فريقنا</a></li>
+                 <li><a href="#resources">المصادر</a></li>
+                 <li><a href="#legislative-pulse">النبض التشريعي</a></li>
+                 <li><a href="#interactive-tools">أدواتنا</a></li>
+                 <li><a href="#faq">الأسئلة الشائعة</a></li>
+                 <li><a href="#contact">التواصل</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="relative min-h-screen flex items-center justify-center text-center overflow-hidden">
+        <div id="hero-canvas-container"></div>
+        <div class="container">
+            <h1 class="text-4xl md:text-6xl lg:text-7xl leading-tight mb-6 animate-on-scroll is-visible">إعادة تعريف الخدمات القانونية <span>بالتقنية</span></h1>
+            <p class="text-lg md:text-xl text-text-secondary mb-10 max-w-3xl mx-auto animate-on-scroll is-visible" style="--delay: 0.2s;">نحن نبني الجيل القادم من الأدوات القانونية الذكية، ونفتح آفاقاً جديدة للمستثمرين والرواد في قطاع التقنية القانونية الواعد.</p>
+            <a href="#contact" class="cta-btn inline-block shadow-lg animate-on-scroll is-visible" style="--delay: 0.4s;">اكتشف فرص الاستثمار</a>
+        </div>
+    </section>
+
+    <section id="stats" class="py-24 md:py-32">
+        <div class="container mx-auto"><div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+            <div class="animate-on-scroll" style="--delay: 0.1s;"><p class="stat-number" data-target="90">0</p><h3 class="text-xl font-semibold mt-2">تخفيض وقت المراجعة</h3><p class="text-text-secondary mt-1">تقليص وقت مراجعة العقود والوثائق بنسبة تصل إلى 90%.</p></div>
+            <div class="animate-on-scroll" style="--delay: 0.2s;"><p class="stat-number" data-target="40">0</p><h3 class="text-xl font-semibold mt-2">زيادة في دقة الامتثال</h3><p class="text-text-secondary mt-1">تحسين دقة تحديد المخاطر ونقاط عدم الامتثال بنسبة 40%.</p></div>
+            <div class="animate-on-scroll" style="--delay: 0.3s;"><p class="stat-number" data-target="24">0</p><h3 class="text-xl font-semibold mt-2">مراقبة تشريعية 24/7</h3><p class="text-text-secondary mt-1">نظام آلي لمراقبة وتحديث التغييرات التشريعية على مدار الساعة.</p></div>
+        </div></div>
+    </section>
+
+    <section id="about" class="py-24 md:py-32 bg-bg-card">
+         <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-5xl font-extrabold mb-6 animate-on-scroll">رؤيتنا: <span>مستقبل القانون الرقمي</span></h2>
+            <p class="text-lg text-text-secondary max-w-4xl mx-auto animate-on-scroll" style="--delay: 0.2s;">
+                في Matrix Consult، نحن لا نقدم استشارات قانونية فحسب، بل نصنع الأدوات التي ستشكل مستقبل القطاع. نحن شركة تقنية قانونية (Legal Tech) متخصصة في تطوير حلول مبتكرة قائمة على الذكاء الاصطناعي لتعزيز الكفاءة والشفافية وخفض التكاليف، مما يخلق قيمة استثنائية للمستثمرين والعملاء على حد سواء.
+            </p>
+        </div>
+    </section>
+    
+    <section id="services" class="py-24 md:py-40">
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-3xl mx-auto"><h2 class="text-3xl md:text-5xl font-extrabold mb-4 animate-on-scroll">منظومة حلول <span>متكاملة</span></h2><p class="text-lg text-text-secondary mb-16 animate-on-scroll" style="--delay: 0.2s;">منصاتنا التقنية مصممة لتعزيز الكفاءة، تقليل المخاطر، وفتح آفاق جديدة للنمو.</p></div>
+            <div class="space-y-12">
+                <!-- Main Service Card -->
+                <div class="service-card-main rounded-3xl flex flex-col md:flex-row items-center gap-10 p-8 md:p-12 animate-on-scroll cursor-pointer" style="--delay: 0.2s;" data-modal-target="#contract-ai-modal">
+                    <div class="flex-shrink-0 p-6 rounded-3xl bg-accent/10">
+                        <svg class="w-16 h-16 text-accent" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m-1.233 15.343a.75.75 0 01-.44 1.223l-3.328.98a.75.75 0 01-.98-.98l.98-3.328a.75.75 0 011.223-.44L15 6.75l3 3-9.233 9.093z" /></svg>
+                    </div>
+                    <div class="text-center md:text-right">
+                        <h3 class="text-2xl lg:text-3xl font-bold mb-3">تحليل العقود الذكي (Contract AI)</h3>
+                        <p class="text-lg text-text-secondary">خدمتنا الرائدة، تستخدم الذكاء الاصطناعي لتحليل وصياغة العقود التجارية والحكومية آلياً، وتحديد المخاطر والبنود غير المتوافقة في ثوانٍ، مما يوفر الوقت ويقلل الأخطاء بشكل جذري.</p>
+                    </div>
+                </div>
+
+                <!-- Grid for other services -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- RegTech -->
+                    <div class="service-card-small text-center md:text-right p-8 rounded-3xl animate-on-scroll cursor-pointer" style="--delay: 0.4s;" data-modal-target="#regtech-modal">
+                        <div class="icon-wrapper-small w-16 h-16 mb-6 rounded-2xl flex items-center justify-center mx-auto md:mx-0">
+                            <svg class="w-9 h-9" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.956 11.956 0 013.598 6 11.956 11.956 0 0112 2.064 11.956 11.956 0 0120.402 6m-1.572 1.572a11.956 11.956 0 01-5.364 1.838M2.402 7.572a11.956 11.956 0 015.364-1.838" /></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">الامتثال الذكي (RegTech)</h3>
+                        <p class="text-text-secondary">أتمتة عمليات الامتثال وتتبع لحظي للتغييرات التشريعية.</p>
+                    </div>
+                    <!-- ESG -->
+                    <div class="service-card-small text-center md:text-right p-8 rounded-3xl animate-on-scroll cursor-pointer" style="--delay: 0.5s;" data-modal-target="#esg-modal">
+                        <div class="icon-wrapper-small w-16 h-16 mb-6 rounded-2xl flex items-center justify-center mx-auto md:mx-0">
+                            <svg class="w-9 h-9" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.62a8.983 8.983 0 013.361-6.867 8.21 8.21 0 00-4.24-1.29 8.25 8.25 0 00-2.836.411 8.22 8.22 0 01-.637 13.82M12 6.375a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0z" /></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">حوكمة الاستدامة وال ESG</h3>
+                        <p class="text-text-secondary">منصة متكاملة لمراقبة وإدارة التزامات الشركة البيئية والاجتماعية.</p>
+                    </div>
+                    <!-- Governance -->
+                    <div class="service-card-small text-center md:text-right p-8 rounded-3xl animate-on-scroll cursor-pointer" style="--delay: 0.6s;" data-modal-target="#governance-modal">
+                        <div class="icon-wrapper-small w-16 h-16 mb-6 rounded-2xl flex items-center justify-center mx-auto md:mx-0">
+                            <svg class="w-9 h-9" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6h1.5m-1.5 3h1.5m-1.5 3h1.5M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" /></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">إدارة حوكمة الشركات</h3>
+                        <p class="text-text-secondary">حل رقمي لإدارة اجتماعات مجلس الإدارة وتسهيل اتخاذ القرارات.</p>
+                    </div>
+                    <!-- IP -->
+                    <div class="service-card-small text-center md:text-right p-8 rounded-3xl animate-on-scroll cursor-pointer" style="--delay: 0.7s;" data-modal-target="#ip-modal">
+                        <div class="icon-wrapper-small w-16 h-16 mb-6 rounded-2xl flex items-center justify-center mx-auto md:mx-0">
+                            <svg class="w-9 h-9" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.898 20.502L16.5 21.75l-.398-1.248a3.375 3.375 0 00-2.456-2.456L12.75 18l1.248-.398a3.375 3.375 0 002.456-2.456L16.5 14.25l.398 1.248a3.375 3.375 0 002.456 2.456L20.25 18l-1.248.398a3.375 3.375 0 00-2.456 2.456z" /></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">إدارة الملكية الفكرية</h3>
+                        <p class="text-text-secondary">منصة مركزية لتتبع وإدارة محفظة الملكية الفكرية للشركة.</p>
+                    </div>
+                    <!-- Risk -->
+                    <div class="service-card-small text-center md:text-right p-8 rounded-3xl animate-on-scroll cursor-pointer" style="--delay: 0.8s;" data-modal-target="#risk-modal">
+                        <div class="icon-wrapper-small w-16 h-16 mb-6 rounded-2xl flex items-center justify-center mx-auto md:mx-0">
+                            <svg class="w-9 h-9" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" /><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" /></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">المخاطر التنبؤية</h3>
+                        <p class="text-text-secondary">استخدام تعلم الآلة للتنبؤ بالمخاطر القانونية والتشغيلية.</p>
+                    </div>
+                    <!-- Investor Portal -->
+                    <div class="service-card-small text-center md:text-right p-8 rounded-3xl animate-on-scroll" style="--delay: 0.9s;">
+                        <div class="icon-wrapper-small w-16 h-16 mb-6 rounded-2xl flex items-center justify-center mx-auto md:mx-0">
+                            <svg class="w-9 h-9" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" /></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">بوابة المستثمرين</h3>
+                        <p class="text-text-secondary">منصة شفافة توفر تقارير أداء لحظية وتحليلات للنمو.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="our-team" class="py-24 md:py-40">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl md:text-5xl font-extrabold mb-4 animate-on-scroll">الخبرة التي <span>تقود الابتكار</span></h2>
+            <p class="text-lg text-text-secondary max-w-3xl mx-auto mb-16 animate-on-scroll" style="--delay: 0.2s;">عقول تجمع بين الخبرة القانونية العميقة والشغف بالتقنية لإعادة تشكيل المستقبل.</p>
+            
+            <div class="founder-card-wrapper mx-auto animate-on-scroll" style="--delay: 0.4s;">
+                <div class="founder-card">
+                    <div class="founder-header">
+                        <div class="founder-image-wrapper">
+                            <img src="https://placehold.co/160x160/1F2937/FFFFFF?text=WS" alt="صورة وتين السفياني" class="founder-image">
+                        </div>
+                        <h3 class="founder-name">وتين السفياني</h3>
+                        <p class="founder-title">مؤسس | رائدة في التقنية القانونية</p>
+                    </div>
+                    <div class="founder-body-interactive">
+                        <div class="founder-tabs flex justify-center border-b border-border-color">
+                            <button class="founder-tab-btn active" data-tab="vision">رؤيتي</button>
+                            <button class="founder-tab-btn" data-tab="experience">خبراتي</button>
+                            <button class="founder-tab-btn" data-tab="contact">التواصل</button>
+                        </div>
+                        <div class="founder-content-wrapper">
+                            <!-- Vision Content -->
+                            <div id="vision" class="founder-tab-content active">
+                                <p class="text-lg italic">"نحن على أعتاب تحول جذري في الممارسة القانونية. رؤيتي هي بناء منظومة تقنية متكاملة تجعل الخدمات القانونية أكثر سهولة، كفاءة، وشفافية، وتمكين الجيل القادم من المحامين بأدوات الذكاء الاصطناعي."</p>
+                            </div>
+                            <!-- Experience Content -->
+                            <div id="experience" class="founder-tab-content">
+                                <p class="text-right px-4">خبيرة متمرسة في <strong>حوكمة وإدارة البيانات</strong>، ومتخصصة في تطبيق <strong>نظام حماية البيانات الشخصية (PDPL)</strong>، مع فهم عميق لأطر <strong>الحوكمة والمخاطر والامتثال (GRC)</strong>. صقلت خبرتها العملية في قلب التحول الرقمي السعودي من خلال برامج مكثفة في جهات رائدة مثل <strong>الهيئة السعودية للبيانات والذكاء الاصطناعي (SDAIA)</strong>، <strong>أرامكو السعودية</strong>، و<strong>PwC</strong>.</p>
+                                <div class="experience-logos">
+                                    <svg class="experience-logo" viewBox="0 0 242.3 43.1" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-label="SDAIA Logo"><path d="M221.7,21.5c0-11.9-9.6-21.5-21.5-21.5s-21.5,9.6-21.5,21.5c0,11.8,9.6,21.5,21.5,21.5S221.7,33.3,221.7,21.5z M201.5,35.4 c-7.7,0-13.9-6.2-13.9-13.9s6.2-13.9,13.9-13.9s13.9,6.2,13.9,13.9S209.2,35.4,201.5,35.4z M171.7,42.5V8.2h-7.1v-8h22.4v8h-7.1v34.3 H171.7z M127.3,31.7L127.3,31.7l-2.4,10.8h-8.5l14-42.5h8.9l14,42.5h-8.5l-2.4-10.8h-15.1V31.7z M129,24.4h11.7l-5.8-24.3L129,24.4z M89.9,42.5V0.2h22.4v8H97v9.8h13.2v7.7H97v9.1h15.3v7.7H89.9z M70.3,42.5V8.2H63.2v-8h22.4v8h-7.1v34.3H70.3z M30.2,31.7L30.2,31.7 l-2.4,10.8H19.3L33.3,0.2h8.9l14,42.5h-8.5l-2.4-10.8H30.2V31.7z M31.9,24.4h11.7l-5.8-24.3L31.9,24.4z"/></svg>
+                                    <svg class="experience-logo" viewBox="0 0 53 53" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-label="Aramco Logo"><path d="M26.5,0.3C11.9,0.3,0,12.2,0,26.8c0,14.6,11.9,26.5,26.5,26.5s26.5-11.9,26.5-26.5C53,12.2,41.1,0.3,26.5,0.3z M26.5,45.5 c-10.2,0-18.4-8.3-18.4-18.4S16.3,8.7,26.5,8.7s18.4,8.3,18.4,18.4S36.7,45.5,26.5,45.5z M37.6,26.8l-11.1-6.4V14l18.4,10.6v4.4 L26.5,39.6v-6.4L37.6,26.8z M15.4,26.8l11.1,6.4V39.6L8.1,29v-4.4l18.4-10.6v6.4L15.4,26.8z"/></svg>
+                                    <svg class="experience-logo" viewBox="0 0 100 40" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-label="PwC Logo"><path d="M12.9,39.6H0V0.4h12.9c7.1,0,12.9,5.8,12.9,12.9c0,5-2.8,9.5-7.1,11.6C22.3,27.1,25.8,32.8,25.8,39.6h-7.7 c0-5.8-3.4-9.3-8.2-9.3H6.2v9.3H12.9z M6.2,6.5v11h6.7c3.7,0,6.7-3,6.7-6.7c0-3.7-3-6.7-6.7-6.7H6.2z M45.8,39.6h-6.2V0.4h6.2V39.6z M93.8,12.2L85.2,25l8.6,14.6h-7.2l-5.1-9.2l-5.1,9.2h-7.2l8.6-14.6l-8.6-14.6h7.2l5.1,9.2l5.1-9.2H93.8z M57.8,39.6l-9.3-17.9l9.3-17.9h7.4l-5.7,11l5.7,11.3v5.6H57.8z"/></svg>
+                                </div>
+                            </div>
+                            <!-- Contact Content -->
+                            <div id="contact" class="founder-tab-content">
+                                <div class="contact-details">
+                                    <a href="mailto:Alsufyani.wateen@gmail.com">Alsufyani.wateen@gmail.com</a>
+                                    <a href="tel:0552054053">0552054053</a>
+                                    <a href="https://www.linkedin.com/in/wateen-alsufyani-291b332b1" target="_blank" rel="noopener noreferrer">ملف LinkedIn</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="methodology" class="py-24 md:py-40 bg-bg-card">
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl md:text-5xl font-extrabold mb-4 animate-on-scroll">منهجيتنا <span>التقنية</span></h2>
+                <p class="text-lg text-text-secondary mb-16 animate-on-scroll" style="--delay: 0.2s;">
+                    نتبع عملية منهجية ومنظمة لتحويل البيانات القانونية المعقدة إلى رؤى استراتيجية قابلة للتنفيذ.
+                </p>
+            </div>
+            <div class="max-w-2xl mx-auto space-y-12">
+                <!-- Step 1 -->
+                <div class="methodology-step animate-on-scroll" data-step="1" style="--delay: 0.4s;">
+                    <h3 class="text-2xl font-bold mb-3">استيعاب البيانات ومعالجتها</h3>
+                    <p class="text-text-secondary">نقوم بجمع المستندات والبيانات من مصادر متعددة، سواء كانت ملفات رقمية أو ورقية عبر تقنية التعرف الضوئي على الحروف (OCR)، أو من خلال التكامل المباشر مع أنظمتكم عبر واجهات برمجية آمنة (APIs).</p>
+                </div>
+                <!-- Step 2 -->
+                <div class="methodology-step animate-on-scroll" data-step="2" style="--delay: 0.6s;">
+                    <h3 class="text-2xl font-bold mb-3">التحليل بواسطة الذكاء الاصطناعي</h3>
+                    <p class="text-text-secondary">تخضع البيانات لتحليل معمق بواسطة نماذجنا اللغوية الكبيرة (LLMs) المدربة خصيصاً على الأنظمة السعودية، والتي تستخلص البنود الرئيسية، تحدد المخاطر، وتقارنها مع أحدث التشريعات.</p>
+                </div>
+                <!-- Step 3 -->
+                <div class="methodology-step animate-on-scroll" data-step="3" style="--delay: 0.8s;">
+                    <h3 class="text-2xl font-bold mb-3">توليد الرؤى والتوصيات</h3>
+                    <p class="text-text-secondary">نحوّل نتائج التحليل إلى تقارير واضحة، تنبيهات فورية على لوحة التحكم، وتوصيات عملية. يمكن للنظام أيضاً أتمتة صياغة مسودات العقود والسياسات بناءً على معايير محددة مسبقاً.</p>
+                </div>
+                 <!-- Step 4 -->
+                <div class="methodology-step animate-on-scroll" data-step="4" style="--delay: 1.0s;">
+                    <h3 class="text-2xl font-bold mb-3">التسليم الآمن والتفاعل</h3>
+                    <p class="text-text-secondary">يتم عرض جميع المخرجات بشكل آمن ومشفر عبر بوابة العميل الخاصة، مما يتيح لكم التفاعل مع النتائج، طلب تعديلات، ومتابعة تنفيذ التوصيات بكل سهولة.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="resources" class="py-24 md:py-40 bg-bg-card">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-center mb-4 animate-on-scroll">رؤى وأبحاث <span>السوق</span></h2>
+            <p class="text-lg text-text-secondary text-center max-w-3xl mx-auto mb-16 animate-on-scroll" style="--delay: 0.2s;">
+                تحليلات معمقة حول سوق التقنية القانونية، الاتجاهات الناشئة، والفرص الاستثمارية التي نشكلها.
+            </p>
+            <div class="draggable-carousel flex gap-8 py-4 cursor-grab -mx-4 px-4">
+                <div class="resource-card animate-on-scroll w-11/12 sm:w-[48%] lg:w-[32%] flex-shrink-0" style="--delay: 0.4s;">
+                    <div class="card-content">
+                        <span class="card-category">تقرير استثماري</span>
+                        <h3 class="card-title">سوق التقنية القانونية في السعودية: فرصة بمليار ريال</h3>
+                        <p class="card-excerpt">تحليل لحجم السوق، ومحركات النمو، وكيف تساهم حلولنا في الاستحواذ على حصة سوقية رائدة.</p>
+                        <a href="#" class="read-more">تحميل التقرير <span class="transform -translate-x-1">&rarr;</span></a>
+                    </div>
+                </div>
+                <div class="resource-card animate-on-scroll w-11/12 sm:w-[48%] lg:w-[32%] flex-shrink-0" style="--delay: 0.5s;">
+                    <div class="card-content">
+                        <span class="card-category">دراسة تقنية</span>
+                        <h3 class="card-title">الذكاء الاصطناعي التوليدي في صياغة العقود: دراسة حالة</h3>
+                        <p class="card-excerpt">نستعرض كيف قلصت أداتنا Contract AI وقت مراجعة العقود بنسبة 90% مع زيادة الدقة بنسبة 40%.</p>
+                        <a href="#" class="read-more">قراءة الدراسة <span class="transform -translate-x-1">&rarr;</span></a>
+                    </div>
+                </div>
+                <div class="resource-card animate-on-scroll w-11/12 sm:w-[48%] lg:w-[32%] flex-shrink-0" style="--delay: 0.6s;">
+                    <div class="card-content">
+                        <span class="card-category">رؤية مستقبلية</span>
+                        <h3 class="card-title">ما بعد الأتمتة: نحو قضاء تنبؤي قائم على البيانات</h3>
+                        <p class="card-excerpt">مقالة رأي تستشرف مستقبل استخدام تحليلات البيانات الضخمة للتنبؤ بنتائج القضايا وتوجيه الاستراتيجيات القانونية.</p>
+                        <a href="#" class="read-more">اقرأ المقال <span class="transform -translate-x-1">&rarr;</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="legislative-pulse" class="py-24 md:py-40">
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl md:text-5xl font-extrabold mb-4 animate-on-scroll">النبض <span>التشريعي</span></h2>
+                <p class="text-lg text-text-secondary mb-16 animate-on-scroll" style="--delay: 0.2s;">
+                    تابع آخر المستجدات والتعديلات على الأنظمة واللوائح السعودية لحظة بلحظة، مباشرة من المصدر الرسمي.
+                </p>
+            </div>
+            <div id="legislative-feed" class="draggable-carousel flex gap-8 py-4 cursor-grab -mx-4 px-4">
+                <!-- Item 1 -->
+                <div class="pulse-card animate-on-scroll w-11/12 sm:w-[48%] lg:w-[32%] flex-shrink-0" style="--delay: 0.4s;">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-xl font-bold text-text-primary">تعديل اللائحة التنفيذية لنظام الشركات</h3>
+                        <span class="pulse-badge pulse-badge-new">جديد</span>
+                    </div>
+                    <p class="text-text-secondary mb-4">
+                        تضمنت التعديلات أحكاماً جديدة تتعلق بحوكمة الشركات ذات المسؤولية المحدودة وتبسيط إجراءات تأسيس الشركات.
+                    </p>
+                    <div class="pulse-meta">
+                        <span>نُشر في: 15 سبتمبر 2025</span>
+                        <a href="#" target="_blank" rel="noopener noreferrer">المصدر: جريدة أم القرى</a>
+                    </div>
+                </div>
+                <!-- Item 2 -->
+                <div class="pulse-card animate-on-scroll w-11/12 sm:w-[48%] lg:w-[32%] flex-shrink-0" style="--delay: 0.5s;">
+                     <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-xl font-bold text-text-primary">إقرار قواعد تنظيم نشاط التمويل الجماعي بالدين</h3>
+                        <span class="pulse-badge pulse-badge-updated">تحديث</span>
+                    </div>
+                    <p class="text-text-secondary mb-4">
+                        أصدر البنك المركزي السعودي القواعد المحدثة لتنظيم ممارسة نشاط التمويل الجماعي القائم على الدين لدعم المنشآت الصغيرة والمتوسطة.
+                    </p>
+                    <div class="pulse-meta">
+                        <span>نُشر في: 08 سبتمبر 2025</span>
+                        <a href="#" target="_blank" rel="noopener noreferrer">المصدر: جريدة أم القرى</a>
+                    </div>
+                </div>
+                <!-- Item 3 -->
+                <div class="pulse-card animate-on-scroll w-11/12 sm:w-[48%] lg:w-[32%] flex-shrink-0" style="--delay: 0.6s;">
+                     <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-xl font-bold text-text-primary">مشروع نظام المعاملات المدنية</h3>
+                        <span class="pulse-badge pulse-badge-draft">مشروع</span>
+                    </div>
+                    <p class="text-text-secondary mb-4">
+                        طرحت هيئة الخبراء بمجلس الوزراء مسودة مشروع نظام المعاملات المدنية لاستطلاع آراء العموم قبل إقراره النهائي.
+                    </p>
+                    <div class="pulse-meta">
+                        <span>طُرح في: 01 سبتمبر 2025</span>
+                        <a href="#" target="_blank" rel="noopener noreferrer">المصدر: منصة استطلاع</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="interactive-tools" class="py-24 md:py-32">
+        <div class="container mx-auto px-4 text-center">
+             <h2 class="text-3xl md:text-5xl font-extrabold mb-6 animate-on-scroll">أدواتنا <span>التفاعلية</span></h2>
+            <p class="text-lg max-w-3xl mx-auto mb-10 text-text-secondary animate-on-scroll" style="--delay: 0.2s;">جرّب القوة التحليلية والتنبؤية لمنصاتنا بشكل مباشر.</p>
+            <div class="mt-10 flex flex-col sm:flex-row flex-wrap justify-center items-center gap-6 animate-on-scroll" style="--delay: 0.4s;">
+                 <button id="launch-dashboard-btn" class="cta-btn inline-flex items-center justify-center gap-3 text-lg !py-4 !px-10">
+                     <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z" /></svg>
+                      <span>لوحة التحكم</span>
+                 </button>
+                 <button id="launch-smart-advisor-btn" class="cta-btn cta-btn-secondary inline-flex items-center justify-center gap-3 text-lg !py-4 !px-10">
+                     <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V8.25a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 8.25v7.5A2.25 2.25 0 0 0 6.75 18Z" /></svg>
+                      <span>المستشار الذكي</span>
+                 </button>
+                 <button id="launch-risk-simulator-btn" class="cta-btn cta-btn-secondary inline-flex items-center justify-center gap-3 text-lg !py-4 !px-10">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 15.75v-1.5a3.375 3.375 0 0 1 3.375-3.375h.942c.368 0 .71.194.898.513l1.109 2.218a3.375 3.375 0 0 0 6.115 0l1.109-2.218c.188-.319.53-.513.898-.513h.942a3.375 3.375 0 0 1 3.375 3.375v1.5M3.75 15.75h16.5M12 21.75l-3.75-3.75M12 21.75l3.75-3.75"></path></svg>
+                    <span>محاكي المخاطر</span>
+                 </button>
+                 <button id="launch-litigation-simulator-btn" class="cta-btn cta-btn-secondary inline-flex items-center justify-center gap-3 text-lg !py-4 !px-10">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-3h6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                    <span>محاكي النتائج القضائية</span>
+                 </button>
+            </div>
+        </div>
+    </section>
+    
+    <section id="faq" class="py-24 md:py-40 bg-bg-card">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-center mb-12 animate-on-scroll">أسئلة <span>المستثمرين</span></h2>
+            <div class="max-w-3xl mx-auto space-y-4" id="faq-accordion">
+                <div class="faq-item animate-on-scroll" style="--delay: 0.2s;"><div class="faq-question flex justify-between items-center p-6 cursor-pointer"><h3 class="text-xl font-semibold">ما هي التقنية الأساسية التي تستخدمونها؟</h3><div class="faq-toggle-icon text-text-secondary text-2xl font-thin">+</div></div><div class="faq-answer text-text-secondary px-6"><p>نعتمد على نماذج لغوية كبيرة (LLMs) متخصصة ومدربة على корпуسات قانونية سعودية، بالإضافة إلى خوارزميات تعلم الآلة لمعالجة اللغة الطبيعية (NLP) والتحليل التنبؤي. بنيتنا التحتية قائمة على السحابة لضمان التوسع والمرونة.</p></div></div>
+                <div class="faq-item animate-on-scroll" style="--delay: 0.4s;"><div class="faq-question flex justify-between items-center p-6 cursor-pointer"><h3 class="text-xl font-semibold">هل تبحثون عن استثمارات حالياً؟</h3><div class="faq-toggle-icon text-text-secondary text-2xl font-thin">+</div></div><div class="faq-answer text-text-secondary px-6"><p>نحن في جولة تمويل أولية (Seed Round) لتسريع تطوير منتجاتنا وتوسيع فريقنا التقني. نرحب بالتواصل مع المستثمرين الملائكيين وأصحاب رؤوس الأموال الجريئة الذين يشاركوننا رؤيتنا لمستقبل القانون.</p></div></div>
+                <div class="faq-item animate-on-scroll" style="--delay: 0.6s;"><div class="faq-question flex justify-between items-center p-6 cursor-pointer"><h3 class="text-xl font-semibold">ما هو حجم السوق الذي تستهدفونه؟</h3><div class="faq-toggle-icon text-text-secondary text-2xl font-thin">+</div></div><div class="faq-answer text-text-secondary px-6"><p>نستهدف سوق الخدمات القانونية في المملكة العربية السعودية الذي يقدر حجمه بمليارات الريالات، مع التركيز على قطاع الشركات (B2B). حلولنا (SaaS) قابلة للتوسع إقليمياً، مما يفتح أسواقاً إضافية واعدة في منطقة الشرق الأوسط وشمال أفريقيا.</p></div></div>
+                 <div class="faq-item animate-on-scroll" style="--delay: 0.8s;"><div class="faq-question flex justify-between items-center p-6 cursor-pointer"><h3 class="text-xl font-semibold">كيف يختلف نموذج عملكم عن شركات المحاماة التقليدية؟</h3><div class="faq-toggle-icon text-text-secondary text-2xl font-thin">+</div></div><div class="faq-answer text-text-secondary px-6"><p>نموذجنا يعتمد على الاشتراكات المتكررة (SaaS) بدلاً من الفوترة بالساعة، مما يوفر تدفقات نقدية يمكن التنبؤ بها وقابلية عالية للتوسع. نحن لا نبيع الوقت، بل نبيع التكنولوجيا التي تضاعف الكفاءة وتقلل المخاطر، وهذا هو الفارق الجوهري الذي يجذب المستثمرين.</p></div></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-24 md:py-40 border-t border-border-color">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="animate-on-scroll text-center lg:text-right">
+                    <h2 class="text-3xl md:text-5xl font-extrabold mb-6 text-text-primary">
+                        انضم إلى <span>مستقبل القانون</span>
+                    </h2>
+                    <p class="text-lg text-text-secondary mb-8 max-w-lg mx-auto lg:mx-0">
+                        سواء كنت مستثمراً تبحث عن الفرصة الكبرى القادمة، أو شركة رائدة تسعى لتبني الابتكار، نحن هنا لبدء الحوار.
+                    </p>
+                </div>
+
+                <div class="bg-bg-card border border-border-color rounded-2xl p-8 md:p-12 shadow-2xl animate-on-scroll" style="--delay: 0.2s;">
+                    <h3 class="text-2xl font-bold mb-6 text-center">فرص استثمارية وتواصل</h3>
+                    <form id="service-request-form" action="#" method="POST" class="space-y-5">
+                          <div>
+                            <select name="الخدمة المطلوبة" required class="w-full">
+                                <option value="" disabled selected>اختر طبيعة التواصل...</option>
+                                <option value="فرص استثمارية (Investor Relations)">فرص استثمارية (Investor Relations)</option>
+                                <option value="طلب عرض توضيحي للمنصة (Product Demo)">طلب عرض توضيحي للمنصة (Product Demo)</option>
+                                <option value="شراكات استراتيجية (Partnerships)">شراكات استراتيجية (Partnerships)</option>
+                                <option value="تواصل مع فريق المبيعات (Sales)">تواصل مع فريق المبيعات (Sales)</option>
+                                <option value="استفسار إعلامي (Media Inquiry)">استفسار إعلامي (Media Inquiry)</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <input type="text" name="الاسم الكامل" placeholder="الاسم الكامل" required class="w-full">
+                            <input type="email" name="البريد الإلكتروني" placeholder="البريد الإلكتروني" required class="w-full">
+                        </div>
+                        <div>
+                            <textarea rows="5" name="الرسالة" placeholder="أخبرنا عن متطلباتك..." required class="w-full"></textarea>
+                        </div>
+                        <button type="submit" class="cta-btn w-full !py-3.5 mt-6 flex items-center justify-center gap-2">
+                            <span>إرسال الطلب</span>
+                        </button>
+                    </form>
+                    <div id="success-message" class="hidden mt-6 p-4 bg-accent/10 text-accent border border-accent/20 rounded-lg"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer class="py-12 border-t border-border-color">
+        <div class="container mx-auto text-center px-4">
+             <div class="mb-6 flex justify-center gap-6">
+                 <a href="#" target="_blank" rel="noopener noreferrer" class="text-text-secondary hover:text-text-primary transition-colors duration-300">
+                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                 </a>
+                 <a href="#" target="_blank" rel="noopener noreferrer" class="text-text-secondary hover:text-text-primary transition-colors duration-300">
+                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                 </a>
+            </div>
+            <div class="flex justify-center gap-6 mb-6">
+                <a href="#" class="text-text-secondary hover:text-text-primary transition-colors" data-modal-target="#privacy-modal">سياسة الخصوصية</a>
+                <a href="#" class="text-text-secondary hover:text-text-primary transition-colors" data-modal-target="#terms-modal">شروط الاستخدام</a>
+            </div>
+            <p class="text-sm text-text-secondary">&copy; <span id="copyright-year">2025</span> Matrix Consult | جميع الحقوق محفوظة</p>
+        </div>
+    </footer>
+</div>
+
+<div id="smart-advisor-portal" class="portal">
+    <div class="portal-content bg-bg-card flex flex-col w-full h-full shadow-2xl">
+        <div class="bg-gradient-to-br from-[var(--accent)] to-[#0055cc] text-white p-4 flex justify-between items-center shadow-lg flex-shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 border-2 border-white/30">
+                    <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="8" height="8" rx="2"/><path d="M8 12v-2a2 2 0 1 1 4 0v2"/><path d="M12 12h8"/><path d="M16 12v-2a2 2 0 1 0-4 0v2"/></svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-xl">المستشار القانوني الذكي</h3>
+                    <p class="text-xs text-slate-300 flex items-center gap-2"><span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>متصل الآن</p>
+                </div>
+            </div>
+            <button id="advisor-close-btn" class="text-3xl font-thin leading-none p-1 hover:bg-white/10 rounded-full transition-colors">&times;</button>
+        </div>
+        <div id="ai-chat-messages" class="flex-grow p-4 overflow-y-auto space-y-4 bg-bg-dark">
+            <div class="flex items-start gap-2.5">
+                <div class="w-10 h-10 rounded-full bg-bg-card flex items-center justify-center flex-shrink-0 border border-border-color">
+                     <svg class="w-6 h-6 text-text-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="8" height="8" rx="2"/><path d="M8 12v-2a2 2 0 1 1 4 0v2"/><path d="M12 12h8"/><path d="M16 12v-2a2 2 0 1 0-4 0v2"/></svg>
+                </div>
+                <div class="bg-bg-card p-4 rounded-lg rounded-tl-none shadow-sm border border-border-color">
+                    <p id="ai-welcome-message" class="text-sm text-text-primary">أهلاً بك. أنا المحرك القانوني الذكي. كيف يمكنني خدمتك اليوم؟</p>
+                </div>
+            </div>
+        </div>
+        <div id="ai-feature-bar">
+            <button class="ai-feature-btn" data-task="draft-contract"><svg class="w-6 h-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>صياغة عقد</button>
+            <button class="ai-feature-btn" data-task="analyze-document"><svg class="w-6 h-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>تحليل مستند</button>
+            <button class="ai-feature-btn" data-task="draft-memo"><svg class="w-6 h-6 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>إعداد مذكرة</button>
+            <button class="ai-feature-btn" data-task="assess-risk"><svg class="w-6 h-6 mb-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>تقييم المخاطر</button>
+            <button class="ai-feature-btn" data-task="draft-policy"><svg class="w-6 h-6 mb-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M12.5 3v18"/><path d="M18 3v18"/></svg>صياغة سياسة</button>
+            <button class="ai-feature-btn" data-task="ask-question"><svg class="w-6 h-6 mb-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path></svg>سؤال عام</button>
+        </div>
+        <div class="p-4 border-t border-[var(--border-color)] bg-bg-card"><form id="ai-chat-form" class="flex gap-3 items-center"><input type="text" id="ai-chat-input" placeholder="اكتب سؤالك أو طلبك هنا..." class="flex-grow p-3 rounded-full border border-[var(--border-color)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition-shadow bg-bg-dark text-text-primary"><button type="submit" class="cta-btn !p-0 !rounded-full w-12 h-12 flex items-center justify-center"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button></form></div>
+    </div>
+</div>
+
+<!-- Modals -->
+<div id="regtech-modal" class="modal-overlay fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4"><div class="modal-content service-modal-content rounded-lg shadow-2xl p-6 md:p-8 max-w-3xl w-full max-h-[80vh] overflow-y-auto relative"><button class="modal-close-btn absolute top-4 left-4 text-text-secondary hover:text-text-primary text-3xl">&times;</button><h2 class="text-2xl md:text-3xl font-extrabold mb-4">الامتثال الذكي (RegTech)</h2><p class="mb-6 text-text-secondary">منصة متكاملة تساعد على أتمتة مهام الامتثال، وتشمل:</p><ul><li>لوحة تحكم مركزية لمراقبة حالة الامتثال.</li><li>نظام تتبع آلي للتغييرات في الأنظمة واللوائح.</li><li>إدارة تقييمات المخاطر وتقييم الأثر على حماية البيانات (DPIA).</li></ul><div class="case-study-snapshot"><h4>مؤشرات الأداء (KPIs):</h4><p class="text-sm">تخفيض الوقت المستغرق في مهام الامتثال بنسبة 70%، وزيادة دقة التقارير بنسبة 95%.</p></div></div></div>
+<div id="contract-ai-modal" class="modal-overlay fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4"><div class="modal-content service-modal-content rounded-lg shadow-2xl p-6 md:p-8 max-w-3xl w-full max-h-[80vh] overflow-y-auto relative"><button class="modal-close-btn absolute top-4 left-4 text-text-secondary hover:text-text-primary text-3xl">&times;</button><h2 class="text-2xl md:text-3xl font-extrabold mb-4">تحليل العقود (Contract AI)</h2><p class="mb-6 text-text-secondary">محرك ذكاء اصطناعي يعزز قدرات الفرق القانونية من خلال:</p><ul><li>استخلاص البنود الرئيسية والمعلومات الهامة من العقود تلقائياً.</li><li>تحديد البنود عالية المخاطر (مثل تحديد المسؤولية، التعويضات).</li><li>دعم اللغة العربية وفهم المصطلحات القانونية المحلية.</li></ul><div class="case-study-snapshot"><h4>مؤشرات الأداء (KPIs):</h4><p class="text-sm">تسريع دورة إبرام العقود بنسبة 50%، وتقليل الأخطاء البشرية في المراجعة بنسبة 80%.</p></div></div></div>
+<div id="risk-modal" class="modal-overlay fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4"><div class="modal-content service-modal-content rounded-lg shadow-2xl p-6 md:p-8 max-w-3xl w-full max-h-[80vh] overflow-y-auto relative"><button class="modal-close-btn absolute top-4 left-4 text-text-secondary hover:text-text-primary text-3xl">&times;</button><h2 class="text-2xl md:text-3xl font-extrabold mb-4">حلول المخاطر التنبؤية</h2><p class="mb-6 text-text-secondary">نظام تحليلي متقدم يمكن الشركات من الانتقال من إدارة المخاطر التفاعلية إلى الاستباقية، ويقدم:</p><ul><li>تحليل البيانات التاريخية والتشغيلية لتحديد الأنماط المسببة للمخاطر.</li><li>نمذجة سيناريوهات المخاطر المحتملة وتأثيرها المالي.</li><li>إصدار تنبيهات مبكرة عند ظهور مؤشرات خطر جديدة.</li></ul><div class="case-study-snapshot"><h4>مؤشرات الأداء (KPIs):</h4><p class="text-sm">تحسين القدرة على التنبؤ بالحوادث التشغيلية بنسبة 45%، وتخفيض التكاليف المرتبطة بالمخاطر غير المتوقعة بنسبة 30%.</p></div></div></div>
+<div id="esg-modal" class="modal-overlay fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4"><div class="modal-content service-modal-content rounded-lg shadow-2xl p-6 md:p-8 max-w-3xl w-full max-h-[80vh] overflow-y-auto relative"><button class="modal-close-btn absolute top-4 left-4 text-text-secondary hover:text-text-primary text-3xl">&times;</button><h2 class="text-2xl md:text-3xl font-extrabold mb-4">حوكمة الاستدامة (ESG)</h2><p class="mb-6 text-text-secondary">منصة لمراقبة وإدارة التزامات الشركة البيئية والاجتماعية والحوكمية، مع توليد تقارير متوافقة مع المعايير الوطنية والعالمية.</p><ul><li>تتبع مؤشرات الأداء الرئيسية للاستدامة.</li><li>أتمتة جمع البيانات من مختلف الإدارات.</li><li>ضمان التوافق مع إفصاحات مبادرة السعودية الخضراء.</li></ul><div class="case-study-snapshot"><h4>مؤشرات الأداء (KPIs):</h4><p class="text-sm">زيادة كفاءة إعداد تقارير الاستدامة بنسبة 60%، وتخفيض مخاطر عدم الامتثال لمعايير ESG.</p></div></div></div>
+<div id="governance-modal" class="modal-overlay fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4"><div class="modal-content service-modal-content rounded-lg shadow-2xl p-6 md:p-8 max-w-3xl w-full max-h-[80vh] overflow-y-auto relative"><button class="modal-close-btn absolute top-4 left-4 text-text-secondary hover:text-text-primary text-3xl">&times;</button><h2 class="text-2xl md:text-3xl font-extrabold mb-4">حوكمة الشركات وإدارة المجالس</h2><p class="mb-6 text-text-secondary">حل رقمي متكامل لإدارة اجتماعات مجلس الإدارة واللجان، وتسهيل عملية اتخاذ القرارات وتوثيقها بشكل آمن ومنظم.</p><ul><li>بوابة آمنة لمشاركة مستندات الاجتماعات.</li><li>أدوات للتصويت الإلكتروني وتدوين محاضر الاجتماعات.</li><li>نظام تتبع تنفيذ القرارات الصادرة عن المجلس.</li></ul><div class="case-study-snapshot"><h4>مؤشرات الأداء (KPIs):</h4><p class="text-sm">تقليل الوقت الإداري لإعداد الاجتماعات بنسبة 80%، وتعزيز أمن وسرية معلومات المجلس.</p></div></div></div>
+<div id="ip-modal" class="modal-overlay fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4"><div class="modal-content service-modal-content rounded-lg shadow-2xl p-6 md:p-8 max-w-3xl w-full max-h-[80vh] overflow-y-auto relative"><button class="modal-close-btn absolute top-4 left-4 text-text-secondary hover:text-text-primary text-3xl">&times;</button><h2 class="text-2xl md:text-3xl font-extrabold mb-4">إدارة الملكية الفكرية</h2><p class="mb-6 text-text-secondary">منصة مركزية لتتبع وإدارة محفظة الملكية الفكرية للشركة (علامات تجارية، براءات اختراع)، ومراقبة أي انتهاكات محتملة.</p><ul><li>جدولة وتذكير بمواعيد تجديد العلامات التجارية.</li><li>نظام أرشفة آمن لجميع وثائق الملكية الفكرية.</li><li>أدوات بحث أولية مدعومة بالذكاء الاصطناعي.</li></ul><div class="case-study-snapshot"><h4>مؤشرات الأداء (KPIs):</h4><p class="text-sm">تخفيض مخاطر فقدان حقوق الملكية الفكرية بسبب إغفال التجديد بنسبة 100%.</p></div></div></div>
+<div id="privacy-modal" class="modal-overlay fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4"><div class="modal-content rounded-lg shadow-2xl p-6 md:p-8 max-w-3xl w-full max-h-[80vh] overflow-y-auto relative"><button class="modal-close-btn absolute top-4 left-4 text-text-secondary hover:text-text-primary text-3xl">&times;</button><h2 class="text-2xl md:text-3xl font-extrabold mb-4">سياسة الخصوصية</h2><div class="text-text-secondary space-y-4 text-sm"><p>نحن في Matrix Consult نلتزم بحماية خصوصية بياناتكم. توضح هذه السياسة كيفية جمعنا واستخدامنا وحمايتنا لمعلوماتكم الشخصية عند استخدامكم لموقعنا وخدماتنا، وذلك بما يتوافق مع نظام حماية البيانات الشخصية في المملكة العربية السعودية.</p><h3 class="font-bold text-text-primary pt-2">1. البيانات التي نجمعها:</h3><p>قد نجمع بيانات شخصية مثل الاسم، البريد الإلكتروني، اسم الشركة، ومعلومات الاتصال عند تعبئة نموذج التواصل. كما نجمع بيانات استخدام غير شخصية لتحسين تجربة الموقع.</p><h3 class="font-bold text-text-primary pt-2">2. استخدام البيانات:</h3><p>تستخدم البيانات للتواصل معكم بخصوص استفساراتكم، وتقديم خدماتنا، وتحسين جودة موقعنا. لن نشارك بياناتكم مع أي طرف ثالث دون موافقتكم الصريحة، إلا إذا كان ذلك مطلوباً بموجب النظام.</p><h3 class="font-bold text-text-primary pt-2">3. أمن البيانات:</h3><p>نطبق إجراءات أمنية وتقنية متقدمة لحماية بياناتكم من الوصول غير المصرح به أو الاستخدام أو الكشف.</p></div></div></div>
+<div id="terms-modal" class="modal-overlay fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4"><div class="modal-content rounded-lg shadow-2xl p-6 md:p-8 max-w-3xl w-full max-h-[80vh] overflow-y-auto relative"><button class="modal-close-btn absolute top-4 left-4 text-text-secondary hover:text-text-primary text-3xl">&times;</button><h2 class="text-2xl md:text-3xl font-extrabold mb-4">شروط الاستخدام</h2><div class="text-text-secondary space-y-4 text-sm"><p>مرحباً بكم في موقع Matrix Consult. باستخدامكم لهذا الموقع، فإنكم توافقون على الالتزام بالشروط والأحكام التالية:</p><h3 class="font-bold text-text-primary pt-2">1. الملكية الفكرية:</h3><p>جميع المحتويات على هذا الموقع، بما في ذلك النصوص والرسومات والشعارات، هي ملك لـ Matrix Consult ومحمية بموجب أنظمة الملكية الفكرية.</p><h3 class="font-bold text-text-primary pt-2">2. إخلاء المسؤولية:</h3><p>المعلومات المقدمة على هذا الموقع هي لأغراض إعلامية عامة فقط ولا تشكل استشارة قانونية. كما أن استخدام الأدوات التفاعلية مثل "المستشار الذكي" لا ينشئ علاقة مهنية بين العميل والمستشار.</p><h3 class="font-bold text-text-primary pt-2">3. الاستخدام المقبول:</h3><p>يجب عدم استخدام الموقع بأي طريقة قد تسبب ضرراً للموقع أو تتعارض مع الأنظمة المعمول بها في المملكة العربية السعودية.</p></div></div></div>
+
+<div id="risk-simulator-portal" class="portal p-4 sm:p-8 flex items-center justify-center">
+    <div class="portal-content bg-bg-card rounded-2xl shadow-2xl flex flex-col w-full max-w-4xl max-h-[90vh]">
+        <!-- Header -->
+        <div class="bg-gradient-to-br from-red-500 to-orange-500 text-white p-4 rounded-t-2xl flex justify-between items-center shadow-lg flex-shrink-0">
+            <div class="flex items-center gap-3">
+                 <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 border-2 border-white/30">
+                    <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 15.75v-1.5a3.375 3.375 0 0 1 3.375-3.375h.942c.368 0 .71.194.898.513l1.109 2.218a3.375 3.375 0 0 0 6.115 0l1.109-2.218c.188-.319.53-.513.898-.513h.942a3.375 3.375 0 0 1 3.375 3.375v1.5M3.75 15.75h16.5M12 21.75l-3.75-3.75M12 21.75l3.75-3.75"></path></svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-xl">محاكي المخاطر التنظيمية</h3>
+                    <p class="text-xs text-slate-300">أداة استرشادية لتحديد الالتزامات النظامية الأولية</p>
+                </div>
+            </div>
+            <button id="risk-simulator-close-btn" class="text-3xl font-thin leading-none p-1 hover:bg-white/10 rounded-full transition-colors">&times;</button>
+        </div>
+        <!-- Body -->
+        <div class="flex-grow p-6 overflow-y-auto bg-bg-dark grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Form -->
+            <div class="flex flex-col">
+                <h4 class="text-lg font-bold mb-4">حدد سيناريو العمل</h4>
+                <form id="risk-simulator-form" class="space-y-6">
+                    <div class="ai-form-group">
+                        <label for="industry-select">اختر قطاعك</label>
+                        <select id="industry-select" name="industry" class="ai-form-input w-full">
+                            <option value="fintech">التقنية المالية (FinTech)</option>
+                            <option value="ecommerce">التجارة الإلكترونية</option>
+                            <option value="healthtech">التقنية الصحية</option>
+                            <option value="transport">النقل والخدمات اللوجستية</option>
+                        </select>
+                    </div>
+                    <div class="ai-form-group">
+                        <label for="activity-select">اختر النشاط</label>
+                        <select id="activity-select" name="activity" class="ai-form-input w-full">
+                            <option value="app-launch">إطلاق تطبيق جديد لجمع بيانات العملاء</option>
+                            <option value="foreign-hire">توظيف خبرات أجنبية</option>
+                            <option value="b2b-contract">إبرام عقد كبير مع جهة حكومية</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="cta-btn w-full !py-3">تحليل المخاطر</button>
+                </form>
+            </div>
+            <!-- Results -->
+            <div id="risk-simulator-results" class="bg-bg-card p-6 rounded-lg border border-border-color flex flex-col">
+                <div class="text-center my-auto" id="risk-results-placeholder">
+                    <svg class="w-16 h-16 mx-auto text-text-secondary opacity-50" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path></svg>
+                    <h4 class="text-lg font-bold mt-4">تقرير المخاطر سيظهر هنا</h4>
+                    <p class="text-text-secondary mt-1">اختر قطاعك ونشاطك لبدء التحليل.</p>
+                </div>
+                <div class="hidden" id="risk-results-content">
+                    <!-- Dynamic content goes here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="litigation-simulator-portal" class="portal p-4 sm:p-8 flex items-center justify-center">
+    <div class="portal-content bg-bg-card rounded-2xl shadow-2xl flex flex-col w-full max-w-5xl max-h-[90vh]">
+        <!-- Header -->
+        <div class="bg-gradient-to-br from-indigo-500 to-purple-600 text-white p-4 rounded-t-2xl flex justify-between items-center shadow-lg flex-shrink-0">
+            <div class="flex items-center gap-3">
+                 <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 border-2 border-white/30">
+                    <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-3h6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-xl">محاكي النتائج القضائية</h3>
+                    <p class="text-xs text-slate-300">أداة تنبؤية استرشادية مبنية على تحليل البيانات</p>
+                </div>
+            </div>
+            <button id="litigation-simulator-close-btn" class="text-3xl font-thin leading-none p-1 hover:bg-white/10 rounded-full transition-colors">&times;</button>
+        </div>
+        <!-- Body -->
+        <div class="flex-grow p-6 overflow-y-auto bg-bg-dark grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Form -->
+            <div class="flex flex-col">
+                <h4 class="text-lg font-bold mb-4">أدخل معطيات القضية</h4>
+                 <form id="litigation-simulator-form" class="space-y-6 flex flex-col flex-grow">
+                    <div class="ai-form-group flex-grow flex flex-col">
+                        <label for="case-description-input" class="mb-2">اشرح تفاصيل قضيتك هنا</label>
+                        <textarea id="case-description-input" name="caseDescription" class="ai-form-input w-full flex-grow" rows="8" placeholder="مثال: تم فصلي من العمل بشكل مفاجئ رغم أن عقدي ساري، ولدي جميع إثباتات الحضور والانصراف ورسائل البريد الإلكتروني التي تثبت أدائي الجيد..."></textarea>
+                    </div>
+                    <button type="submit" class="cta-btn w-full !py-3 mt-auto">تحليل الاحتمالات</button>
+                </form>
+            </div>
+            <!-- Results -->
+            <div id="litigation-simulator-results" class="bg-bg-card p-6 rounded-lg border border-border-color flex flex-col">
+                <div class="text-center my-auto" id="litigation-results-placeholder">
+                    <svg class="w-16 h-16 mx-auto text-text-secondary opacity-50" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v18M9.75 3v18M15.75 3v18M21.75 3v18M3.75 9h18M3.75 15h18" /></svg>
+                    <h4 class="text-lg font-bold mt-4">تحليل الاحتمالات سيظهر هنا</h4>
+                    <p class="text-text-secondary mt-1">أدخل معطيات القضية لبدء التحليل.</p>
+                </div>
+                <div class="hidden" id="litigation-results-content">
+                    <h3 class="text-xl font-bold mb-4 text-center">النتائج التنبؤية</h3>
+                    <div class="h-48 mb-4"><canvas id="litigation-outcome-chart"></canvas></div>
+                    <div id="litigation-key-factors" class="text-sm"></div>
+                    <p class="text-xs text-text-secondary mt-6 text-center">إخلاء مسؤولية: هذه تقديرات آلية استرشادية، والنتائج الفعلية قد تختلف.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a href="#home" id="back-to-top" class="!bg-accent !p-0"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg></a>
+
+<div id="dashboard-portal" class="portal">
+    <div id="loading-screen">
+        <div class="spinner mx-auto"></div>
+        <p class="mt-4 text-lg text-text-secondary">جاري تحميل لوحة التحكم الاحترافية...</p>
+    </div>
+    <div id="dashboard-content" class="container mx-auto p-4 sm:p-6 md:p-8">
+        <div class="flex flex-wrap justify-between items-center gap-4 mb-8">
+            <div>
+                <h1 id="dashboard-welcome" class="text-2xl md:text-3xl font-bold">لوحة التحكم التنفيذية</h1>
+                <p class="text-text-secondary text-sm mt-1">آخر تحديث: <span id="last-updated-time">الآن</span></p>
+            </div>
+            <button id="dashboard-close-btn" class="bg-white/10 p-2 rounded-full hover:bg-white/20 transition-colors">
+                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- KPIs -->
+            <div class="widget">
+                <div class="widget-title"><span>مؤشر الامتثال</span><div class="widget-icon"><svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg></div></div>
+                <div class="kpi-main"><span class="kpi-value" id="kpi-compliance">97.2</span><span class="kpi-trend trend-up" id="kpi-compliance-trend">+0.5%</span></div>
+            </div>
+            <div class="widget">
+                <div class="widget-title"><span>المخاطر النشطة</span><div class="widget-icon"><svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" /></svg></div></div>
+                <div class="kpi-main"><span class="kpi-value" id="kpi-risks">12</span><span class="kpi-trend trend-down" id="kpi-risks-trend">+1</span></div>
+            </div>
+             <div class="widget">
+                <div class="widget-title"><span>العقود قيد المراجعة</span><div class="widget-icon"><svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg></div></div>
+                <div class="kpi-main"><span class="kpi-value" id="kpi-contracts">8</span><span class="kpi-trend trend-up" id="kpi-contracts-trend">-2</span></div>
+            </div>
+            <div class="widget">
+                <div class="widget-title"><span>السياسات المحدثة</span><div class="widget-icon"><svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" /></svg></div></div>
+                <div class="kpi-main"><span class="kpi-value" id="kpi-policies">85%</span><span class="kpi-trend trend-up" id="kpi-policies-trend">+5%</span></div>
+            </div>
+            
+            <!-- Main Content Area -->
+            <div class="widget col-span-1 md:col-span-2 lg:col-span-4 lg:col-start-1 lg:row-start-2">
+                <div class="widget-title"><h3>تطور مؤشر الامتثال (آخر 6 أشهر)</h3></div>
+                <div class="h-80"><canvas id="compliance-timeline-chart"></canvas></div>
+            </div>
+            <div class="widget col-span-1 md:col-span-2 lg:col-span-2 lg:row-start-3">
+                <div class="widget-title"><h3>مصفوفة المخاطر</h3></div>
+                <div class="risk-matrix-container">
+                     <div class="flex items-center gap-4">
+                        <div class="risk-axis-label"><span>الاحتمالية</span></div>
+                        <div class="risk-matrix-wrapper">
+                            <div class="risk-matrix" id="risk-matrix-grid"></div>
+                            <div id="risk-tooltip" class="risk-tooltip"></div>
+                        </div>
+                    </div>
+                    <div class="risk-axes mt-2 pr-[2rem]">
+                        <span>منخفض</span><span>متوسط</span><span>مرتفع</span>
+                    </div>
+                     <p class="text-center text-sm text-text-secondary -mt-1 pr-[2rem]">الأثر</p>
+                </div>
+            </div>
+            <div class="widget col-span-1 md:col-span-2 lg:col-span-2 lg:row-start-3">
+                <div class="widget-title"><h3>توزيع الامتثال</h3></div>
+                <div class="h-64 flex items-center justify-center"><canvas id="compliance-donut-chart"></canvas></div>
+            </div>
+             <div class="widget col-span-1 md:col-span-2 lg:col-span-4 lg:row-start-4">
+                <div class="widget-title"><h3>أحدث التنبيهات</h3></div>
+                <div id="alerts-feed" class="space-y-2">
+                    <!-- Alerts will be injected here by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div></div>
+
+<script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"}}</script>
+<script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const container = document.getElementById('hero-canvas-container');
+        if (container) {
+            let scene, camera, renderer;
+            let mouseX = 0, mouseY = 0;
+            const windowHalfX = window.innerWidth / 2;
+            const windowHalfY = window.innerHeight / 2;
+
+            const init = () => {
+                scene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
+                camera.position.z = 200;
+
+                const geometry = new THREE.SphereGeometry(80, 64, 64);
+                const pointsMaterial = new THREE.PointsMaterial({ color: 0x9CA3AF, size: 0.7 });
+                const points = new THREE.Points(geometry, pointsMaterial);
+                scene.add(points);
+
+                const linesMaterial = new THREE.LineBasicMaterial({ color: '#4B5563', transparent: true, opacity: 0.3 });
+                const linePositions = [];
+                const vertices = geometry.attributes.position.array;
+                const vertexCount = vertices.length / 3;
+                for (let i = 0; i < 2000; i++) {
+                    const startIndex = Math.floor(Math.random() * vertexCount);
+                    const endIndex = Math.floor(Math.random() * vertexCount);
+                    const startVec = new THREE.Vector3().fromArray(vertices, startIndex * 3);
+                    const endVec = new THREE.Vector3().fromArray(vertices, endIndex * 3);
+                    if (startVec.distanceTo(endVec) < 25) {
+                        linePositions.push(...startVec.toArray(), ...endVec.toArray());
+                    }
+                }
+                const lineGeometry = new THREE.BufferGeometry();
+                lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+                const lines = new THREE.LineSegments(lineGeometry, linesMaterial);
+                scene.add(lines);
+
+                renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                renderer.setPixelRatio(window.devicePixelRatio);
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                container.appendChild(renderer.domElement);
+                
+                document.addEventListener('mousemove', (event) => {
+                    mouseX = (event.clientX - windowHalfX) / 4;
+                    mouseY = (event.clientY - windowHalfY) / 4;
+                });
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            };
+
+            const animate = () => {
+                requestAnimationFrame(animate);
+                camera.position.x += (mouseX - camera.position.x) * 0.005;
+                camera.position.y += (-mouseY - camera.position.y) * 0.005;
+                camera.lookAt(scene.position);
+                scene.rotation.y = Date.now() * 0.0001;
+                renderer.render(scene, camera);
+            };
+
+            init();
+            animate();
+        }
+
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const hamburgerIcon = document.getElementById('hamburger-icon');
+        const closeIcon = document.getElementById('close-icon');
+
+        const toggleMobileMenu = () => {
+            mobileMenu.classList.toggle('hidden');
+            hamburgerIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+        };
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        document.querySelectorAll('#mobile-menu a').forEach(link => link.addEventListener('click', toggleMobileMenu));
+        
+        const navbar = document.getElementById('navbar');
+        const backToTopBtn = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            const isScrolled = window.scrollY > 50;
+            navbar.classList.toggle('scrolled', isScrolled);
+            backToTopBtn.classList.toggle('show', isScrolled);
+        });
+        
+        const form = document.getElementById('service-request-form');
+        const successMessage = document.getElementById('success-message');
+        if (form) {
+            form.addEventListener('submit', (e) => { 
+                e.preventDefault();
+                successMessage.textContent = 'شكراً لك! تم استلام طلبك بنجاح وسنتواصل معك قريباً.';
+                successMessage.classList.remove('hidden');
+                form.reset();
+            });
+        }
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    const statNumber = entry.target.querySelector('.stat-number');
+                    if(statNumber && !statNumber.classList.contains('animated')) {
+                        animateValue(statNumber, 0, parseInt(statNumber.dataset.target), 2000);
+                        statNumber.classList.add('animated');
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+        
+        document.querySelectorAll('.bento-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+            });
+        });
+
+        document.getElementById('copyright-year').textContent = new Date().getFullYear();
+
+        function animateValue(obj, start, end, duration, isPercent = false) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                let val = progress * (end - start) + start;
+                if (isPercent) obj.innerHTML = `${val.toFixed(1)}<span class="text-3xl opacity-70">%</span>`;
+                else obj.innerHTML = Math.floor(val);
+                if (progress < 1) window.requestAnimationFrame(step);
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        document.querySelectorAll('.faq-item .faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                const currentlyOpen = document.querySelector('.faq-item.open');
+                if (currentlyOpen && currentlyOpen !== item) {
+                    currentlyOpen.classList.remove('open');
+                }
+                item.classList.toggle('open');
+            });
+        });
+
+        const modalTriggers = document.querySelectorAll('[data-modal-target]');
+        const allModals = document.querySelectorAll('.modal-overlay');
+
+        function openModal(modal) { if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); } }
+        function closeModal(modal) { if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); } }
+
+        modalTriggers.forEach(trigger => {
+            trigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                const modal = document.querySelector(trigger.dataset.modalTarget);
+                openModal(modal);
+            });
+        });
+
+        allModals.forEach(modal => {
+            modal.querySelector('.modal-close-btn')?.addEventListener('click', () => closeModal(modal));
+            modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(modal); });
+        });
+
+        // --- Interactive Founder Card Logic ---
+        const founderTabsContainer = document.querySelector('.founder-tabs');
+        if (founderTabsContainer) {
+            const tabButtons = founderTabsContainer.querySelectorAll('.founder-tab-btn');
+            const tabContents = document.querySelectorAll('.founder-tab-content');
+
+            founderTabsContainer.addEventListener('click', (e) => {
+                const clickedButton = e.target.closest('.founder-tab-btn');
+                if (!clickedButton) return;
+
+                const tabId = clickedButton.dataset.tab;
+                
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                clickedButton.classList.add('active');
+
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === tabId) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        // --- Portals Logic ---
+        const launchDashboardBtn = document.getElementById('launch-dashboard-btn');
+        const dashboardPortal = document.getElementById('dashboard-portal');
+        const loadingScreen = document.getElementById('loading-screen');
+        const dashboardCloseBtn = document.getElementById('dashboard-close-btn');
+        let charts = {};
+        let liveUpdateInterval = null;
+        
+        launchDashboardBtn?.addEventListener('click', () => {
+            dashboardPortal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+                dashboardPortal.classList.add('loaded');
+                initializeDashboard();
+            }, 1500);
+        });
+
+        dashboardCloseBtn?.addEventListener('click', () => {
+            dashboardPortal.classList.remove('active', 'loaded');
+            document.body.style.overflow = '';
+            if (liveUpdateInterval) {
+                clearInterval(liveUpdateInterval);
+                liveUpdateInterval = null;
+            }
+            setTimeout(() => loadingScreen.classList.remove('hidden'), 500);
+        });
+
+        function initializeDashboard() {
+            if (charts.timeline) { // Avoid re-initializing if already open
+                 startLiveUpdates();
+                 return;
+            }
+            renderAllCharts();
+            renderRiskMatrix();
+            renderAlertsFeed();
+            startLiveUpdates();
+        }
+
+        function renderAllCharts() {
+            Chart.defaults.color = 'rgba(255, 255, 255, 0.7)';
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            
+            // Timeline Chart
+            const timelineCtx = document.getElementById('compliance-timeline-chart')?.getContext('2d');
+            if(timelineCtx) {
+                const gradient = timelineCtx.createLinearGradient(0, 0, 0, 300);
+                gradient.addColorStop(0, 'rgba(0, 119, 255, 0.4)');
+                gradient.addColorStop(1, 'rgba(0, 119, 255, 0)');
+
+                charts.timeline = new Chart(timelineCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس'],
+                        datasets: [{ 
+                            label: 'نسبة الامتثال', 
+                            data: [85, 88, 87, 92, 95, 97.2], 
+                            borderColor: 'var(--accent)',
+                            backgroundColor: gradient,
+                            fill: true, 
+                            tension: 0.4,
+                            pointBackgroundColor: 'var(--accent)',
+                            pointBorderColor: '#fff',
+                            pointHoverRadius: 7,
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'var(--accent)',
+                        }]
+                    },
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        scales: { 
+                            y: { min: 80, max: 100, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { callback: value => value + '%' } }, 
+                            x: { grid: { display: false } } 
+                        }, 
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: 'var(--bg-dark)',
+                                titleFont: { weight: 'bold' },
+                                bodyFont: { size: 14 },
+                                padding: 12,
+                                cornerRadius: 8,
+                                displayColors: false
+                            }
+                        } 
+                    }
+                });
+            }
+            
+            // Donut Chart
+            const donutCtx = document.getElementById('compliance-donut-chart')?.getContext('2d');
+            if (donutCtx) {
+                charts.donut = new Chart(donutCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['المالية', 'تقنية المعلومات', 'الموارد البشرية', 'التشغيل'],
+                        datasets: [{
+                            data: [30, 25, 20, 25],
+                            backgroundColor: ['#0077FF', '#3B82F6', '#60A5FA', '#93C5FD'],
+                            borderColor: 'var(--bg-card)',
+                            borderWidth: 4,
+                            hoverOffset: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '70%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 20,
+                                    boxWidth: 12
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        
+        function renderRiskMatrix() {
+            const grid = document.getElementById('risk-matrix-grid');
+            const tooltip = document.getElementById('risk-tooltip');
+            if (!grid || !tooltip) return;
+            grid.innerHTML = ''; // Clear previous dots
+
+            const colors = [
+                ['#22c55e', '#a3e635', '#facc15', '#fb923c', '#ef4444'],
+                ['#22c55e', '#a3e635', '#facc15', '#fb923c', '#ef4444'],
+                ['#a3e635', '#facc15', '#fb923c', '#ef4444', '#dc2626'],
+                ['#facc15', '#fb923c', '#ef4444', '#dc2626', '#b91c1c'],
+                ['#fb923c', '#ef4444', '#dc2626', '#b91c1c', '#991b1b']
+            ].reverse();
+
+            for (let row = 0; row < 5; row++) {
+                for (let col = 0; col < 5; col++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'risk-cell';
+                    cell.style.backgroundColor = `${colors[row][col]}40`; // With opacity
+                    cell.style.border = `1px solid ${colors[row][col]}90`;
+                    grid.appendChild(cell);
+                }
+            }
+
+            const risks = [ 
+                {x: 4, y: 4, title: 'خطر سيبراني: اختراق بيانات'}, 
+                {x: 2, y: 3, title: 'خطر تشغيلي: تعطل النظام'}, 
+                {x: 1, y: 2, title: 'خطر امتثال: تأخر تحديث سياسة'},
+                {x: 3, y: 1, title: 'خطر مالي: تقلبات السوق'}
+            ];
+            
+            risks.forEach(risk => {
+                const dot = document.createElement('div');
+                dot.className = 'risk-dot';
+                dot.style.left = `calc(${risk.x * 20 + 10}% - 7px)`;
+                dot.style.bottom = `calc(${risk.y * 20 + 10}% - 7px)`;
+                
+                dot.addEventListener('mouseover', (e) => {
+                    tooltip.innerHTML = risk.title;
+                    tooltip.classList.add('show');
+                    const gridRect = grid.getBoundingClientRect();
+                    tooltip.style.left = `${e.clientX - gridRect.left + 15}px`;
+                    tooltip.style.top = `${e.clientY - gridRect.top - 15}px`;
+                });
+                dot.addEventListener('mouseout', () => {
+                    tooltip.classList.remove('show');
+                });
+                grid.appendChild(dot);
+            });
+        }
+        
+        function renderAlertsFeed() {
+            const feed = document.getElementById('alerts-feed');
+            if (!feed) return;
+            const alerts = [
+                { priority: 'high', title: 'تنبيه: تحديث تشريعي جديد يتطلب مراجعة فورية.', time: 'منذ 5 دقائق' },
+                { priority: 'medium', title: 'مهمة مستحقة: مراجعة سياسة مكافحة غسيل الأموال.', time: 'منذ ساعتين' },
+                { priority: 'low', title: 'اكتملت المراجعة الآلية للعقود الجديدة بنجاح.', time: 'منذ 8 ساعات' },
+            ];
+            feed.innerHTML = alerts.map(alert => `
+                <div class="alert-item priority-${alert.priority}">
+                    <div class="alert-icon-wrapper">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" /></svg>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-sm">${alert.title}</p>
+                        <p class="alert-time">${alert.time}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function startLiveUpdates() {
+            if (liveUpdateInterval) clearInterval(liveUpdateInterval);
+
+            liveUpdateInterval = setInterval(() => {
+                // Update KPIs
+                const kpiCompliance = document.getElementById('kpi-compliance');
+                const kpiRisks = document.getElementById('kpi-risks');
+                
+                let complianceVal = parseFloat(kpiCompliance.textContent);
+                complianceVal += (Math.random() - 0.4) * 0.1;
+                kpiCompliance.textContent = complianceVal.toFixed(1);
+                
+                if (Math.random() > 0.8) {
+                    let riskVal = parseInt(kpiRisks.textContent);
+                    riskVal += (Math.random() > 0.5 ? 1 : -1);
+                    if (riskVal < 10) riskVal = 10;
+                    kpiRisks.textContent = riskVal;
+                    kpiRisks.classList.add('flash-update-red');
+                    setTimeout(() => kpiRisks.classList.remove('flash-update-red'), 800);
+                } else {
+                    kpiCompliance.classList.add('flash-update');
+                    setTimeout(() => kpiCompliance.classList.remove('flash-update'), 800);
+                }
+
+                // Update Chart
+                if (charts.timeline && charts.timeline.data.datasets[0].data.length < 12) {
+                    const lastData = charts.timeline.data.datasets[0].data.slice(-1)[0];
+                    const newData = Math.max(80, Math.min(100, lastData + (Math.random() - 0.45)));
+                    charts.timeline.data.labels.push('...');
+                    charts.timeline.data.datasets[0].data.push(newData.toFixed(1));
+                    charts.timeline.update();
+                }
+
+                document.getElementById('last-updated-time').textContent = new Date().toLocaleTimeString('ar-SA');
+
+            }, 4000);
+        }
+        
+        // --- Smart Advisor Portal Logic ---
+        const launchAdvisorBtn = document.getElementById('launch-smart-advisor-btn');
+        const advisorPortal = document.getElementById('smart-advisor-portal');
+        const advisorCloseBtn = document.getElementById('advisor-close-btn');
+
+        launchAdvisorBtn?.addEventListener('click', () => {
+            advisorPortal.classList.add('active');
+        });
+
+        advisorCloseBtn?.addEventListener('click', () => {
+            advisorPortal.classList.remove('active');
+        });
+        
+        // --- Risk Simulator Portal Logic ---
+        const riskSimulatorPortal = document.getElementById('risk-simulator-portal');
+        const riskSimulatorCloseBtn = document.getElementById('risk-simulator-close-btn');
+        const riskSimulatorForm = document.getElementById('risk-simulator-form');
+        const riskResultsPlaceholder = document.getElementById('risk-results-placeholder');
+        const riskResultsContent = document.getElementById('risk-results-content');
+
+        const launchRiskSimulatorBtn = document.getElementById('launch-risk-simulator-btn');
+        launchRiskSimulatorBtn?.addEventListener('click', () => {
+            riskSimulatorPortal.classList.add('active');
+        });
+        riskSimulatorCloseBtn?.addEventListener('click', () => {
+            riskSimulatorPortal.classList.remove('active');
+        });
+
+        const MOCK_RISK_DATA = {
+            fintech: {
+                'app-launch': {
+                    title: 'تقرير إطلاق تطبيق تقنية مالية',
+                    risks: [
+                        { severity: 'مرتفعة', name: 'متطلبات البنك المركزي (SAMA)', desc: 'الحصول على التراخيص اللازمة من "ساما" قبل إطلاق أي خدمة مالية.' },
+                        { severity: 'مرتفعة', name: 'نظام حماية البيانات الشخصية', desc: 'تطبيق أعلى معايير حماية بيانات العملاء والحصول على موافقات صريحة.' },
+                        { severity: 'متوسطة', name: 'قواعد مكافحة غسل الأموال', desc: 'تطبيق إجراءات "اعرف عميلك" (KYC) للتحقق من هويات المستخدمين.' }
+                    ]
+                },
+                'foreign-hire': {
+                    title: 'تقرير توظيف خبرات أجنبية (FinTech)',
+                    risks: [
+                        { severity: 'مرتفعة', name: 'نظام العمل وأنظمة الإقامة', desc: 'استيفاء متطلبات وزارة الموارد البشرية وإصدار تأشيرات وإقامات عمل نظامية.'},
+                        { severity: 'متوسطة', name: 'توطين الوظائف (نطاقات)', desc: 'التأكد من تحقيق نسب التوطين المطلوبة في القطاع المالي لتجنب المخالفات.'},
+                        { severity: 'منخفضة', name: 'حماية الأسرار التجارية', desc: 'تضمين بنود عدم منافسة وسرية معلومات في عقود العمل حسب نظام العمل.'}
+                    ]
+                },
+                 'b2b-contract': {
+                    title: 'تقرير إبرام عقد حكومي (FinTech)',
+                    risks: [
+                        { severity: 'مرتفعة', name: 'نظام المنافسات والمشتريات الحكومية', desc: 'الالتزام بكافة الشروط والمواصفات الواردة في كراسة الشروط والمواصفات.'},
+                        { severity: 'مرتفعة', name: 'متطلبات الأمن السيبراني الوطنية', desc: 'ضمان الامتثال لضوابط الهيئة الوطنية للأمن السيبراني لحماية البيانات.'},
+                        { severity: 'متوسطة', name: 'متطلبات منصة "اعتماد"', desc: 'التأكد من تسجيل جميع مراحل العقد ورفع الفواتير والمستخلصات عبر المنصة.'}
+                    ]
+                }
+            },
+            ecommerce: {
+                'app-launch': {
+                    title: 'تقرير إطلاق متجر إلكتروني',
+                    risks: [
+                        { severity: 'مرتفعة', name: 'نظام التجارة الإلكترونية', desc: 'الإفصاح عن بيانات الموفر وعنوانه، وتوضيح سياسات الاستبدال والإرجاع.' },
+                        { severity: 'مرتفعة', name: 'نظام حماية البيانات الشخصية', desc: 'حماية بيانات المشترين وعناوينهم وبيانات الدفع الخاصة بهم.' },
+                        { severity: 'متوسطة', name: 'متطلبات وزارة التجارة', desc: 'الحصول على سجل تجاري وتوثيق المتجر في منصة "الأعمال".' }
+                    ]
+                }
+            },
+             healthtech: {
+                'app-launch': {
+                    title: 'تقرير إطلاق تطبيق صحي',
+                    risks: [
+                        { severity: 'مرتفعة', name: 'أنظمة وزارة الصحة وهيئة الغذاء والدواء', desc: 'الحصول على التراخيص اللازمة للمنتجات والتطبيقات الصحية.' },
+                        { severity: 'مرتفعة', name: 'سرية معلومات المرضى', desc: 'الالتزام التام بمتطلبات حماية وأمن بيانات المرضى الصحية.' },
+                        { severity: 'متوسطة', name: 'ضوابط الإعلانات الصحية', desc: 'التأكد من أن جميع المواد التسويقية متوافقة مع الأنظمة ولا تحتوي على ادعاءات مضللة.' }
+                    ]
+                }
+            }
+        };
+
+        riskSimulatorForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(riskSimulatorForm);
+            const industry = formData.get('industry');
+            const activity = formData.get('activity');
+
+            const resultData = MOCK_RISK_DATA[industry]?.[activity] || MOCK_RISK_DATA.ecommerce['app-launch']; // Fallback
+
+            riskResultsPlaceholder.classList.add('hidden');
+            
+            let contentHtml = `<h3 class="text-xl font-bold mb-4">${resultData.title}</h3><div class="space-y-4">`;
+
+            resultData.risks.forEach(risk => {
+                const severityColor = risk.severity === 'مرتفعة' ? 'text-danger-color' : risk.severity === 'متوسطة' ? 'text-yellow-500' : 'text-success-color';
+                contentHtml += `
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <h5 class="font-bold">${risk.name}</h5>
+                            <span class="font-bold text-sm ${severityColor}">${risk.severity}</span>
+                        </div>
+                        <p class="text-sm text-text-secondary mt-1">${risk.desc}</p>
+                    </div>
+                `;
+            });
+
+            contentHtml += '</div><p class="text-xs text-text-secondary mt-6 text-center">إخلاء مسؤولية: هذا تحليل آلي استرشادي ولا يغني عن الاستشارة القانونية المتخصصة.</p>';
+
+            riskResultsContent.innerHTML = contentHtml;
+            riskResultsContent.classList.remove('hidden');
+        });
+        
+        document.querySelectorAll('#industry-select, #activity-select').forEach(el => {
+            el.addEventListener('change', () => {
+                riskResultsPlaceholder.classList.remove('hidden');
+                riskResultsContent.classList.add('hidden');
+            });
+        });
+
+        // --- Litigation Simulator Portal Logic ---
+        const launchLitigationSimulatorBtn = document.getElementById('launch-litigation-simulator-btn');
+        const litigationSimulatorPortal = document.getElementById('litigation-simulator-portal');
+        const litigationSimulatorCloseBtn = document.getElementById('litigation-simulator-close-btn');
+        const litigationSimulatorForm = document.getElementById('litigation-simulator-form');
+        const litigationResultsPlaceholder = document.getElementById('litigation-results-placeholder');
+        const litigationResultsContent = document.getElementById('litigation-results-content');
+        let litigationChart = null;
+        
+        launchLitigationSimulatorBtn?.addEventListener('click', () => {
+            litigationSimulatorPortal.classList.add('active');
+        });
+        litigationSimulatorCloseBtn?.addEventListener('click', () => {
+            litigationSimulatorPortal.classList.remove('active');
+        });
+
+        const MOCK_LITIGATION_DATA = {
+            commercial: {
+                'contract-dispute': { base: [65, 25, 10], factors: {'strong': 1.2, 'medium': 1, 'weak': 0.7}, key_factors: ["وضوح بنود العقد.", "وجود إثباتات على الإخلال.", "حجم الضرر المترتب."] },
+                'payment-dispute':  { base: [75, 15, 10], factors: {'strong': 1.1, 'medium': 1, 'weak': 0.6}, key_factors: ["صحة الفواتير والمستخلصات.", "إثبات تسليم الخدمة/المنتج.", "وجود اعتراف بالمديونية."] }
+            },
+            labor: {
+                'unfair-dismissal': { base: [60, 20, 20], factors: {'strong': 1.3, 'medium': 1, 'weak': 0.8}, key_factors: ["مشروعية سبب الفصل (مادة 77).", "اتباع الإجراءات النظامية للفصل.", "وجود إنذارات سابقة موثقة."] },
+                'payment-dispute':  { base: [80, 10, 10], factors: {'strong': 1.1, 'medium': 1, 'weak': 0.7}, key_factors: ["وجود مسيرات رواتب موقعة.", "تطابق كشوف الحسابات البنكية.", "بنود الأجر في عقد العمل."] }
+            }
+        };
+        
+        function analyzeCaseText(text) {
+            const analysis = {
+                caseType: 'commercial', // default
+                caseSubject: 'contract-dispute', // default
+                evidenceStrength: 'medium' // default
+            };
+            const lowerText = text.toLowerCase();
+
+            // Determine Case Type
+            if (lowerText.includes('فصل') || lowerText.includes('موظف') || lowerText.includes('عمل') || lowerText.includes('راتب')) {
+                analysis.caseType = 'labor';
+            }
+
+            // Determine Case Subject based on Case Type
+            if (analysis.caseType === 'labor') {
+                if (lowerText.includes('فصل')) {
+                    analysis.caseSubject = 'unfair-dismissal';
+                } else if (lowerText.includes('راتب') || lowerText.includes('مستحقات') || lowerText.includes('لم يدفع')) {
+                    analysis.caseSubject = 'payment-dispute';
+                }
+            } else { // commercial
+                 if (lowerText.includes('لم يدفع') || lowerText.includes('مبلغ') || lowerText.includes('فاتورة')) {
+                    analysis.caseSubject = 'payment-dispute';
+                } else {
+                    analysis.caseSubject = 'contract-dispute';
+                }
+            }
+            
+            // Determine Evidence Strength
+            if (lowerText.includes('كل الاثباتات') || lowerText.includes('عقد موثق') || lowerText.includes('مستندات كاملة') || lowerText.includes('أدلة قوية')) {
+                analysis.evidenceStrength = 'strong';
+            } else if (lowerText.includes('اتفاق شفهي') || lowerText.includes('بدون عقد') || lowerText.includes('ما عندي دليل')) {
+                analysis.evidenceStrength = 'weak';
+            }
+
+            return analysis;
+        }
+
+        litigationSimulatorForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            litigationResultsPlaceholder.innerHTML = `
+                <div class="spinner mx-auto"></div>
+                <h4 class="text-lg font-bold mt-4">جاري تحليل القضية...</h4>
+                <p class="text-text-secondary mt-1">يستخدم الذكاء الاصطناعي لفهم معطياتك.</p>
+            `;
+            litigationResultsPlaceholder.classList.remove('hidden');
+            litigationResultsContent.classList.add('hidden');
+
+            setTimeout(() => {
+                const caseDescription = document.getElementById('case-description-input').value;
+                 if (!caseDescription.trim()) {
+                     litigationResultsPlaceholder.innerHTML = `
+                        <svg class="w-16 h-16 mx-auto text-danger-color opacity-50" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" /></svg>
+                        <h4 class="text-lg font-bold mt-4">الرجاء إدخال وصف القضية</h4>
+                        <p class="text-text-secondary mt-1">لا يمكن التحليل بدون تفاصيل.</p>
+                    `;
+                    return;
+                }
+
+                const analysis = analyzeCaseText(caseDescription);
+                const { caseType, caseSubject, evidenceStrength } = analysis;
+
+                const resultData = MOCK_LITIGATION_DATA[caseType]?.[caseSubject] || MOCK_LITIGATION_DATA.commercial['contract-dispute'];
+                
+                let [success, settlement, loss] = resultData.base;
+                const multiplier = resultData.factors[evidenceStrength];
+                success = Math.min(95, success * multiplier);
+                const remainder = 100 - success;
+                settlement = remainder * (resultData.base[1] / (resultData.base[1] + resultData.base[2]));
+                loss = remainder - settlement;
+
+                const finalProbs = [Math.round(success), Math.round(settlement), Math.round(loss)];
+
+                litigationResultsPlaceholder.classList.add('hidden');
+                
+                const caseTypeArabic = caseType === 'labor' ? 'عمالي' : 'تجاري';
+                const caseSubjectArabic = {
+                    'unfair-dismissal': 'فصل تعسفي',
+                    'payment-dispute': 'مطالبة مالية',
+                    'contract-dispute': 'خلاف على عقد'
+                }[caseSubject];
+                const evidenceStrengthArabic = {
+                    'strong': 'قوية',
+                    'medium': 'متوسطة',
+                    'weak': 'ضعيفة'
+                }[evidenceStrength];
+                
+                const interpretationHtml = `
+                    <div class="mb-4 p-3 bg-bg-dark rounded-md border border-border-color">
+                        <h6 class="font-bold text-sm">فهمنا لقضيتك:</h6>
+                        <p class="text-xs text-text-secondary">نزاع ${caseTypeArabic} حول ${caseSubjectArabic} بأدلة ${evidenceStrengthArabic}.</p>
+                    </div>
+                `;
+                const factorsHtml = '<h6>العوامل المؤثرة الرئيسية:</h6><ul class="list-disc pr-4 mt-2 space-y-1">' + resultData.key_factors.map(f => `<li>${f}</li>`).join('') + '</ul>';
+                document.getElementById('litigation-key-factors').innerHTML = interpretationHtml + factorsHtml;
+
+                const ctx = document.getElementById('litigation-outcome-chart').getContext('2d');
+                if (litigationChart) { litigationChart.destroy(); }
+                litigationChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['حكم لصالحك', 'تسوية', 'خسارة'],
+                        datasets: [{
+                            label: 'الاحتمالية',
+                            data: finalProbs,
+                            backgroundColor: [ 'rgba(34, 197, 94, 0.7)', 'rgba(245, 158, 11, 0.7)', 'rgba(239, 68, 68, 0.7)' ],
+                            borderColor: [ '#22c55e', '#f59e0b', '#ef4444' ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                        scales: { x: { max: 100, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { callback: value => value + '%' } }, y: { grid: { display: false } } },
+                        plugins: { legend: { display: false } }
+                    }
+                });
+
+                litigationResultsContent.classList.remove('hidden');
+            }, 2000);
+        });
+
+        // Chat Logic
+        const chatForm = document.getElementById('ai-chat-form');
+        const chatInput = document.getElementById('ai-chat-input');
+        const chatMessages = document.getElementById('ai-chat-messages');
+        const featureBar = document.getElementById('ai-feature-bar');
+        const docUploadInput = document.createElement('input');
+        docUploadInput.type = 'file';
+        docUploadInput.accept = '.pdf,.doc,.docx,.txt';
+        docUploadInput.style.display = 'none';
+        document.body.appendChild(docUploadInput);
+        
+        const OFFICIAL_LAWS_JS = {
+             "النظام الأساسي للحكم": {
+                 1: "المملكة العربية السعودية، دولة عربية إسلامية، ذات سيادة تامة، دينها الإسلام، ودستورها كتاب الله تعالى وسنة رسوله صلى الله عليه وسلم. ولغتها هي اللغة العربية، وعاصمتها مدينة الرياض.",
+             },
+             "نظام العمل": {
+                77: "ما لم يتضمن العقد تعويضاً محدداً مقابل إنهائه من أحد الطرفين لسبب غير مشروع، يستحق الطرف المتضرر من إنهاء العقد تعويضاً يعادل أجر خمسة عشر يوماً عن كل سنة من سنوات خدمة العامل.",
+                83: "إذا كان العمل المنوط بالعامل يسمح له بمعرفة عملاء صاحب العمل أو بالاطلاع على أسرار عمله، جاز لصاحب العمل أن يشترط على العامل ألا يقوم بعد انتهاء العقد بمنافسته."
+             },
+             "نظام التجارة الإلكترونية": {
+                13: "للمستهلك الحق في إرجاع المنتج خلال سبعة أيام من تاريخ تسلمه، ما لم يتفق الطرفان على مدة أطول."
+             },
+             "نظام حماية البيانات الشخصية": {
+                2: "لا يجوز جمع البيانات الشخصية إلا من صاحبها مباشرة، ولا يجوز معالجتها إلا لغرض مشروع ومحدد تم إعلام صاحب البيانات به.",
+             }
+        };
+
+        function findRelevantArticlesJS(query) {
+             if (!query) return [];
+             const queryLower = query.trim().toLowerCase();
+             const results = [];
+             for (const lawName in OFFICIAL_LAWS_JS) {
+                 for (const articleNum in OFFICIAL_LAWS_JS[lawName]) {
+                     const articleText = OFFICIAL_LAWS_JS[lawName][articleNum].toLowerCase();
+                     let score = 0;
+                     queryLower.split(/\s+/).forEach(word => { if (word.length > 2 && articleText.includes(word)) score++; });
+                     if (score > 0) results.push({ lawName, articleNum, articleText: OFFICIAL_LAWS_JS[lawName][articleNum], score });
+                 }
+             }
+             return results.sort((a, b) => b.score - a.score);
+        }
+
+        async function callGeminiAPI(userPrompt, systemPrompt) {
+            await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1000));
+            
+            if (systemPrompt.includes("النصوص:")) {
+                const articles = findRelevantArticlesJS(userPrompt);
+                if (articles.length > 0) {
+                    let responseText = "بناءً على الأنظمة السعودية ذات الصلة:\n\n";
+                    responseText += `**- وفقًا للمادة (${articles[0].articleNum}) من ${articles[0].lawName}:** "${articles[0].articleText}"\n`;
+                    responseText += "\n**الخلاصة:** النص النظامي المذكور أعلاه يوفر الأساس للتعامل مع هذا الاستفسار.";
+                    return responseText;
+                }
+                return "بعد البحث في قاعدة الأنظمة المتاحة، لم يتم العثور على مادة قانونية تعالج هذا الاستفسار بشكل مباشر.";
+            } 
+            else if (systemPrompt.includes("استراتيجي")) {
+                 return `# تحليل استراتيجي
+**1. نقاط القوة والضعف:**
+- **قوة:** [اذكر نقطة قوة مثل: "وجود عقد مكتوب وواضح"]
+- **ضعف:** [اذكر نقطة ضعف مثل: "عدم توثيق المخالفات بشكل فوري"]
+
+**2. خيارات التفاوض:**
+- **الخيار الأول (تصالحي):** عرض تسوية مالية معقولة لتجنب التقاضي.
+- **الخيار الثاني (حازم):** إرسال إشعار قانوني يوضح الموقف النظامي وقوة الأدلة.
+
+**3. بدائل تسوية النزاعات (ADR):**
+- **الوساطة:** اقتراح اللجوء لوسيط معتمد لمحاولة التوصل لحل ودي.
+- **التحكيم:** إذا كان العقد يتضمن شرط تحكيم، يمكن تفعيله كبديل أسرع من القضاء العام.
+
+**إخلاء مسؤولية:** هذا تحليل استرشادي ولا يعتبر استشارة قانونية ملزمة.`;
+            }
+            return `تم استلام طلبك "${userPrompt}". يجري التحليل...`;
+        }
+
+        if (chatForm) chatForm.addEventListener('submit', async (e) => { 
+            e.preventDefault(); 
+            const userMessage = chatInput.value.trim(); 
+            if (!userMessage) return; 
+            appendMessage(userMessage, 'user'); 
+            chatInput.value = ''; 
+            showTypingIndicator(); 
+            
+            const preciseSystemPrompt = `أنت مستشار قانوني يعتمد على نصوص الأنظمة السعودية.`;
+            const advisorySystemPrompt = `أنت محلل قانوني استراتيجي يقدم رأيًا يوضح نقاط القوة والضعف وخيارات التفاوض.`;
+
+            try {
+                const [preciseOpinion, advisoryOpinion] = await Promise.all([
+                    callGeminiAPI(userMessage, preciseSystemPrompt),
+                    callGeminiAPI(userMessage, advisorySystemPrompt)
+                ]);
+                removeTypingIndicator();
+                const dualResponseHtml = `<div class="ai-response-block space-y-4">
+                    <div>
+                        <h4 class="text-base !mb-2 text-text-primary"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>الرأي القانوني المباشر</h4>
+                        <div class="policy-draft-content !text-sm !max-h-none">${preciseOpinion.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')}</div>
+                    </div>
+                    <div class="border-t border-border-color pt-4">
+                        <h4 class="text-base !mb-2 text-text-primary"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>التحليل الاستراتيجي</h4>
+                        <div class="policy-draft-content !bg-bg-card !text-sm !max-h-none">${advisoryOpinion.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')}</div>
+                    </div>
+                </div>`;
+                appendMessage(dualResponseHtml, 'ai');
+            } catch (error) {
+                removeTypingIndicator();
+                appendMessage("عذراً، حدث خطأ أثناء جلب التحليل.", 'ai');
+            }
+        });
+
+        if (featureBar) featureBar.addEventListener('click', (e) => e.target.closest('.ai-feature-btn')?.dataset.task && initiateTask(e.target.closest('.ai-feature-btn').dataset.task));
+        
+        function initiateTask(task) {
+             let formHtml = ''; let promptMessage = 'يرجى ملء النموذج:';
+             switch (task) {
+                 case 'draft-contract': formHtml = getContractFormHtml(); break;
+                 case 'analyze-document': docUploadInput.click(); return;
+                 case 'ask-question': chatInput.focus(); return;
+                 default: chatInput.value = `قم بـ: ${task}`; chatInput.focus(); return;
+             }
+             appendMessage(promptMessage, 'ai');
+             if (formHtml) {
+                 const formWrapper = document.createElement('div');
+                 formWrapper.innerHTML = formHtml;
+                 chatMessages.appendChild(formWrapper);
+                 chatMessages.scrollTop = chatMessages.scrollHeight;
+             }
+        }
+
+        function appendMessage(htmlContent, sender) { const wrapper = document.createElement('div'); wrapper.className = 'flex items-start gap-2.5'; if (sender === 'user') { wrapper.classList.add('justify-end'); wrapper.innerHTML = `<div class="bg-[var(--accent)] text-white p-4 rounded-lg rounded-br-none max-w-[85%] shadow-md"><p class="text-sm">${htmlContent}</p></div>`; } else { if (htmlContent.trim().startsWith('<div class="ai-response-block">')) { wrapper.innerHTML = `<div class="w-10 h-10 rounded-full bg-bg-card border border-border-color flex items-center justify-center flex-shrink-0"><svg class="w-6 h-6 text-text-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="8" height="8" rx="2"/><path d="M8 12v-2a2 2 0 1 1 4 0v2"/><path d="M12 12h8"/><path d="M16 12v-2a2 2 0 1 0-4 0v2"/></svg></div><div class="max-w-[85%] w-full">${htmlContent}</div>`; } else { wrapper.innerHTML = `<div class="w-10 h-10 rounded-full bg-bg-card border border-border-color flex items-center justify-center flex-shrink-0"><svg class="w-6 h-6 text-text-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="8" height="8" rx="2"/><path d="M8 12v-2a2 2 0 1 1 4 0v2"/><path d="M12 12h8"/><path d="M16 12v-2a2 2 0 1 0-4 0v2"/></svg></div><div class="bg-bg-card border border-border-color p-4 rounded-lg rounded-tl-none max-w-[85%] shadow-sm"><div class="text-sm text-text-primary">${htmlContent}</div></div>`; } } chatMessages.appendChild(wrapper); chatMessages.scrollTop = chatMessages.scrollHeight; }
+        function showTypingIndicator() { if (document.getElementById('typing-indicator')) return; const indicator = document.createElement('div'); indicator.id = 'typing-indicator'; indicator.innerHTML = `<div class="flex items-start gap-2.5"><div class="w-10 h-10 rounded-full bg-bg-card border border-border-color flex items-center justify-center flex-shrink-0"><svg class="w-6 h-6 text-text-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="8" height="8" rx="2"/><path d="M8 12v-2a2 2 0 1 1 4 0v2"/><path d="M12 12h8"/><path d="M16 12v-2a2 2 0 1 0-4 0v2"/></svg></div><div class="ai-typing-indicator bg-bg-card border border-border-color p-4 rounded-lg rounded-tl-none flex items-center space-x-1 shadow-sm"><span class="w-2 h-2 bg-text-secondary rounded-full inline-block"></span><span class="w-2 h-2 bg-text-secondary rounded-full inline-block"></span><span class="w-2 h-2 bg-text-secondary rounded-full inline-block"></span></div></div>`; chatMessages.appendChild(indicator); chatMessages.scrollTop = chatMessages.scrollHeight; }
+        function removeTypingIndicator() { document.getElementById('typing-indicator')?.remove(); }
+        function getContractFormHtml() { return `<div class="ai-form-container"><form data-task="draft-contract"><h4>صياغة عقد</h4><div class="ai-form-group"><label>نوع العقد</label><select name="contractType" class="ai-form-input" required><option value="عقد عمل (وفق نظام العمل السعودي)">عقد عمل (نظام العمل السعودي)</option><option value="عقد تأسيس شركة ذات مسؤولية محدودة">عقد تأسيس شركة (ذ.م.م)</option></select></div><div class="ai-form-group"><label>الطرف الأول</label><input type="text" name="party1" class="ai-form-input" required></div><div class="ai-form-group"><label>الطرف الثاني</label><input type="text" name="party2" class="ai-form-input" required></div><button type="submit" class="cta-btn w-full !py-3">توليد</button></form></div>`; }
+    
+        // --- Draggable Carousel Logic ---
+        const carousels = document.querySelectorAll('.draggable-carousel');
+        carousels.forEach(slider => {
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            slider.addEventListener('mousedown', (e) => {
+                isDown = true;
+                slider.classList.add('grabbing');
+                startX = e.pageX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+            });
+            slider.addEventListener('mouseleave', () => {
+                isDown = false;
+                slider.classList.remove('grabbing');
+            });
+            slider.addEventListener('mouseup', () => {
+                isDown = false;
+                slider.classList.remove('grabbing');
+            });
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - slider.offsetLeft;
+                const walk = (x - startX) * 2.5; // scroll-fast
+                slider.scrollLeft = scrollLeft - walk;
+            });
+        });
+    });
+</script>
+</body>
+</html>
+
+
+
+
